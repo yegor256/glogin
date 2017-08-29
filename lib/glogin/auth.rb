@@ -1,0 +1,77 @@
+# encoding: utf-8
+#
+# Copyright (c) 2017 Yegor Bugayenko
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the 'Software'), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+require 'net/http'
+require 'uri'
+require 'yaml'
+require 'json'
+require 'open-uri'
+
+module GLogin
+  #
+  # GitHub auth mechanism
+  #
+  class Auth
+    def initialize(id, secret, redirect)
+      @id = id
+      @secret = secret
+      @redirect = redirect
+    end
+
+    def login_uri
+      'https://github.com/login/oauth/authorize?client_id=' +
+        URI.encode(@id) +
+        '&redirect_uri=' +
+        URI.encode(@redirect)
+    end
+
+    def access_token(code)
+      uri = URI.parse('https://github.com/login/oauth/access_token')
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      req = Net::HTTP::Post.new(uri.request_uri)
+      req.set_form_data(
+        'code' => code,
+        'client_id' => @id,
+        'client_secret' => @secret
+      )
+      req['Accept'] = 'application/json'
+      res = http.request(req)
+      raise "Error (#{res.code}): #{res.body}" unless res.code == '200'
+      puts res.body
+      JSON.parse(res.body)['access_token']
+    end
+
+    def user(token)
+      uri = URI.parse('https://api.github.com/user')
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      req = Net::HTTP::Get.new(uri.request_uri)
+      req['Accept-Header'] = 'application/json'
+      req['Authorization'] = "token #{token}"
+      res = http.request(req)
+      JSON.parse(res.body)
+    end
+  end
+end
