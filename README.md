@@ -12,8 +12,10 @@
 ## GitHub Login for Ruby web app
 
 This simple gem will help you enable login/logout through
-GitHub OAuth for your web application. This is how it works with
-Sinatra, but you can do something similar in any framework.
+[GitHub OAuth](https://developer.github.com/apps/building-integrations/setting-up-and-registering-oauth-apps/)
+for your web application. This is how it works with
+[Sinatra](http://www.sinatrarb.com/),
+but you can do something similar in any framework.
 
 First, somewhere in the global space, before the app starts:
 

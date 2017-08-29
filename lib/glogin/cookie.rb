@@ -66,7 +66,7 @@ module GLogin
         cpr = Cookie.cipher
         cpr.encrypt
         cpr.key = Digest::SHA1.hexdigest(@secret)
-        encrypted = cpr.update("#{@json['login']}|#{@json['avatar']}")
+        encrypted = cpr.update("#{@json['login']}|#{@json['avatar_url']}")
         encrypted << cpr.final
         Base64.encode64(encrypted.to_s)
       end

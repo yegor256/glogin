@@ -30,7 +30,7 @@ class TestCookie < Minitest::Test
       GLogin::Cookie::Open.new(
         JSON.parse(
           "{\"login\":\"yegor256\",\
-          \"avatar\":\"https://avatars1.githubusercontent.com/u/526301\"}"
+          \"avatar_url\":\"https://avatars1.githubusercontent.com/u/526301\"}"
         ),
         secret
       ).to_s,
@@ -44,7 +44,7 @@ class TestCookie < Minitest::Test
     assert_raises OpenSSL::Cipher::CipherError do
       GLogin::Cookie::Closed.new(
         GLogin::Cookie::Open.new(
-          JSON.parse('{"login":"x","avatar":"x"}'),
+          JSON.parse('{"login":"x","avatar_url":"x"}'),
           'secret-1'
         ).to_s,
         'secret-2'
