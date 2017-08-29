@@ -24,6 +24,10 @@ require 'openssl'
 require 'digest/sha1'
 require 'base64'
 
+# GLogin main module.
+# Author:: Yegor Bugayenko (yegor256@gmail.com)
+# Copyright:: Copyright (c) 2017 Yegor Bugayenko
+# License:: MIT
 module GLogin
   #
   # Secure cookie
@@ -36,7 +40,7 @@ module GLogin
         @secret = secret
       end
 
-      def to_s
+      def to_user
         if @secret.empty?
           @text
         else
@@ -45,15 +49,16 @@ module GLogin
           cpr.key = Digest::SHA1.hexdigest(@secret)
           decrypted = cpr.update(Base64.decode64(@text))
           decrypted << cpr.final
-          decrypted.to_s
+          parts = decrypted.to_s.split('|')
+          { login: parts[0], avatar: parts[1] }
         end
       end
     end
 
     # Open
     class Open
-      def initialize(text, secret)
-        @text = text
+      def initialize(json, secret)
+        @json = json
         @secret = secret
       end
 
@@ -61,7 +66,7 @@ module GLogin
         cpr = Cookie.cipher
         cpr.encrypt
         cpr.key = Digest::SHA1.hexdigest(@secret)
-        encrypted = cpr.update(@text)
+        encrypted = cpr.update("#{@json['login']}|#{@json['avatar']}")
         encrypted << cpr.final
         Base64.encode64(encrypted.to_s)
       end

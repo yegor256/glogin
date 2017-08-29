@@ -12,9 +12,83 @@
 ## GitHub Login for Ruby web app
 
 This simple gem will help you enable login/logout through
-GitHub OAuth for your web application.
+GitHub OAuth for your web application. This is how it works with
+Sinatra, but you can do something similar in any framework.
 
-...
+First, somewhere in the global space, before the app starts:
+
+```ruby
+require 'glogin'
+configure do
+  set :glogin, GLogin::Auth.new(
+    // Make sure their values are coming from a secure
+    // place and are not visible in the source code:
+    client_id, client_secret,
+    // This is what you will register in GitHub as a callback URL:
+    'http://www.example.com/github-oauth'
+  )
+end
+```
+
+Next, for all web pages we need to parse a cookie, if it exists,
+and convert it into a user:
+
+```ruby
+before '/*' do
+  if cookies[:glogin]
+    begin
+      @user = Cookie::Closed.new(
+        cookies[:glogin],
+        // This must be some long text to be used to
+        // encrypt the value in the cookie.
+        secret
+      ).to_user
+    rescue OpenSSL::Cipher::CipherError => _
+      @user = nil
+    end
+  end
+end
+```
+
+If the `glogin` cookie is coming it and it contains a valid data,
+a local variable `@user` will be set to something like this:
+
+```ruby
+{ login: 'yegor256', avatar: 'http://...' }
+```
+
+Next, we need a URL for GitHub OAuth callback:
+
+```ruby
+get '/github-oauth' do
+  cookies[:glogin] = Cookie::Open.new(
+    settings.glogin.user(params[:code]),
+    // The same encryption secret that we were using above:
+    secret
+  ).to_s
+  redirect to('/')
+end
+```
+
+Finally, we need a logout URL:
+
+```ruby
+get '/logout' do
+  cookies.delete(:glogin)
+  redirect to('/')
+end
+```
+
+One more thing is the login URL you will need for your front page. Here
+it is:
+
+```ruby
+settings.glogin.login_uri
+```
+
+For unit testing you can just provide an empty string as a `secret` for
+`Cookie::Open` and `Cookie::Closed` and the encryption will be disabled:
+whatever will be coming from the cookie will be trusted.
 
 I use this gem in [sixnines](https://github.com/yegor256/sixnines)
 and [0pdd](https://github.com/yegor256/0pdd) web apps.

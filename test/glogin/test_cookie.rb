@@ -23,24 +23,32 @@
 require 'minitest/autorun'
 require_relative '../../lib/glogin/cookie'
 
-class TestGLogin < Minitest::Test
+class TestCookie < Minitest::Test
   def test_encrypts_and_decrypts
-    text = 'yegor256'
     secret = 'this&84-- (832=_'
-    assert(
-      GLogin::Cookie::Closed.new(
-        GLogin::Cookie::Open.new(text, secret).to_s,
+    user = GLogin::Cookie::Closed.new(
+      GLogin::Cookie::Open.new(
+        JSON.parse(
+          "{\"login\":\"yegor256\",\
+          \"avatar\":\"https://avatars1.githubusercontent.com/u/526301\"}"
+        ),
         secret
-      ).to_s == text
-    )
+      ).to_s,
+      secret
+    ).to_user
+    assert(user[:login] == 'yegor256')
+    assert(user[:avatar] == 'https://avatars1.githubusercontent.com/u/526301')
   end
 
   def test_fails_on_broken_text
     assert_raises OpenSSL::Cipher::CipherError do
       GLogin::Cookie::Closed.new(
-        GLogin::Cookie::Open.new('yegor256', 'secret-1').to_s,
+        GLogin::Cookie::Open.new(
+          JSON.parse('{"login":"x","avatar":"x"}'),
+          'secret-1'
+        ).to_s,
         'secret-2'
-      ).to_s
+      ).to_user
     end
   end
 end

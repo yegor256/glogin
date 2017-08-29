@@ -20,14 +20,18 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-require 'nokogiri'
-require_relative 'glogin/version'
-require_relative 'glogin/auth'
-require_relative 'glogin/cookie'
+require 'minitest/autorun'
+require_relative '../../lib/glogin/cookie'
 
-# GLogin main module.
-# Author:: Yegor Bugayenko (yegor256@gmail.com)
-# Copyright:: Copyright (c) 2017 Yegor Bugayenko
-# License:: MIT
-module GLogin
+class TestAuth < Minitest::Test
+  def test_login_uri
+    auth = GLogin::Auth.new(
+      'client_id', 'client_secret', 'http://www.example.com/github-oauth'
+    )
+    assert(
+      auth.login_uri.start_with?(
+        'https://github.com/login/oauth/authorize'
+      )
+    )
+  end
 end

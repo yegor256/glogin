@@ -24,8 +24,12 @@ require 'net/http'
 require 'uri'
 require 'yaml'
 require 'json'
-require 'open-uri'
+require 'cgi'
 
+# GLogin main module.
+# Author:: Yegor Bugayenko (yegor256@gmail.com)
+# Copyright:: Copyright (c) 2017 Yegor Bugayenko
+# License:: MIT
 module GLogin
   #
   # GitHub auth mechanism
@@ -39,10 +43,24 @@ module GLogin
 
     def login_uri
       'https://github.com/login/oauth/authorize?client_id=' +
-        URI.encode(@id) +
+        CGI.escape(@id) +
         '&redirect_uri=' +
-        URI.encode(@redirect)
+        CGI.escape(@redirect)
     end
+
+    def user(code)
+      uri = URI.parse('https://api.github.com/user')
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      req = Net::HTTP::Get.new(uri.request_uri)
+      req['Accept-Header'] = 'application/json'
+      req['Authorization'] = "token #{access_token(code)}"
+      res = http.request(req)
+      JSON.parse(res.body)
+    end
+
+    private
 
     def access_token(code)
       uri = URI.parse('https://github.com/login/oauth/access_token')
@@ -60,18 +78,6 @@ module GLogin
       raise "Error (#{res.code}): #{res.body}" unless res.code == '200'
       puts res.body
       JSON.parse(res.body)['access_token']
-    end
-
-    def user(token)
-      uri = URI.parse('https://api.github.com/user')
-      http = Net::HTTP.new(uri.host, uri.port)
-      http.use_ssl = true
-      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      req = Net::HTTP::Get.new(uri.request_uri)
-      req['Accept-Header'] = 'application/json'
-      req['Authorization'] = "token #{token}"
-      res = http.request(req)
-      JSON.parse(res.body)
     end
   end
 end
