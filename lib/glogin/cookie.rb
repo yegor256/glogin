@@ -41,17 +41,19 @@ module GLogin
       end
 
       def to_user
-        if @secret.empty?
-          @text
-        else
-          cpr = Cookie.cipher
-          cpr.decrypt
-          cpr.key = Digest::SHA1.hexdigest(@secret)
-          decrypted = cpr.update(Base64.decode64(@text))
-          decrypted << cpr.final
-          parts = decrypted.to_s.split('|')
-          { login: parts[0], avatar: parts[1] }
-        end
+        plain =
+          if @secret.empty?
+            @text
+          else
+            cpr = Cookie.cipher
+            cpr.decrypt
+            cpr.key = Digest::SHA1.hexdigest(@secret)
+            decrypted = cpr.update(Base64.decode64(@text))
+            decrypted << cpr.final
+            decrypted.to_s
+          end
+        parts = plain.split('|')
+        { login: parts[0], avatar: parts[1] }
       end
     end
 
