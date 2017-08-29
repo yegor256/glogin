@@ -24,8 +24,9 @@ configure do
     // Make sure their values are coming from a secure
     // place and are not visible in the source code:
     client_id, client_secret,
-    // This is what you will register in GitHub as a callback URL:
-    'http://www.example.com/github-oauth'
+    // This is what you will register in GitHub as an
+    // authorization callback URL:
+    'http://www.example.com/github-callback'
   )
 end
 ```
@@ -34,6 +35,7 @@ Next, for all web pages we need to parse a cookie, if it exists,
 and convert it into a user:
 
 ```ruby
+require 'sinatra/cookies'
 before '/*' do
   if cookies[:glogin]
     begin
@@ -60,7 +62,7 @@ a local variable `@user` will be set to something like this:
 Next, we need a URL for GitHub OAuth callback:
 
 ```ruby
-get '/github-oauth' do
+get '/github-callback' do
   cookies[:glogin] = Cookie::Open.new(
     settings.glogin.user(params[:code]),
     // The same encryption secret that we were using above:

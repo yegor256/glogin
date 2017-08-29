@@ -36,8 +36,8 @@ class TestCookie < Minitest::Test
       ).to_s,
       secret
     ).to_user
-    assert(user[:login] == 'yegor256')
-    assert(user[:avatar] == 'https://avatars1.githubusercontent.com/u/526301')
+    assert_equal(user[:login], 'yegor256')
+    assert_equal(user[:avatar], 'https://avatars1.githubusercontent.com/u/526301')
   end
 
   def test_fails_on_broken_text

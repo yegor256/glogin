@@ -36,7 +36,9 @@ module GLogin
   #
   class Auth
     def initialize(id, secret, redirect)
+      raise "GitHub client ID can't be nil" if id.nil?
       @id = id
+      raise "GitHub client secret can't be nil" if secret.nil?
       @secret = secret
       @redirect = redirect
     end
