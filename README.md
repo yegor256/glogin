@@ -23,11 +23,11 @@ First, somewhere in the global space, before the app starts:
 require 'glogin'
 configure do
   set :glogin, GLogin::Auth.new(
-    // Make sure their values are coming from a secure
-    // place and are not visible in the source code:
+    # Make sure their values are coming from a secure
+    # place and are not visible in the source code:
     client_id, client_secret,
-    // This is what you will register in GitHub as an
-    // authorization callback URL:
+    # This is what you will register in GitHub as an
+    # authorization callback URL:
     'http://www.example.com/github-callback'
   )
 end
@@ -43,8 +43,8 @@ before '/*' do
     begin
       @user = Cookie::Closed.new(
         cookies[:glogin],
-        // This must be some long text to be used to
-        // encrypt the value in the cookie.
+        # This must be some long text to be used to
+        # encrypt the value in the cookie.
         secret
       ).to_user
     rescue OpenSSL::Cipher::CipherError => _
@@ -67,7 +67,7 @@ Next, we need a URL for GitHub OAuth callback:
 get '/github-callback' do
   cookies[:glogin] = Cookie::Open.new(
     settings.glogin.user(params[:code]),
-    // The same encryption secret that we were using above:
+    # The same encryption secret that we were using above:
     secret
   ).to_s
   redirect to('/')
