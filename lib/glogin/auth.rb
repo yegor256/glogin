@@ -59,6 +59,7 @@ module GLogin
       req['Accept-Header'] = 'application/json'
       req['Authorization'] = "token #{access_token(code)}"
       res = http.request(req)
+      raise "Error (#{res.code}): #{res.body}" unless res.code == '200'
       JSON.parse(res.body)
     end
 
