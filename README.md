@@ -54,7 +54,7 @@ before '/*' do
 end
 ```
 
-If the `glogin` cookie is coming it and it contains a valid data,
+If the `glogin` cookie is coming in and contains a valid data,
 a local variable `@user` will be set to something like this:
 
 ```ruby
@@ -91,12 +91,12 @@ settings.glogin.login_uri
 ```
 
 For unit testing you can just provide an empty string as a `secret` for
-`Cookie::Open` and `Cookie::Closed` and the encryption will be disabled:
+`GLogin::Cookie::Open` and `GLogin::Cookie::Closed` and the encryption will be disabled:
 whatever will be coming from the cookie will be trusted.
 
 I use this gem in [sixnines](https://github.com/yegor256/sixnines)
-and [0pdd](https://github.com/yegor256/0pdd) web apps.
-They both are using Sinatra.
+and [0pdd](https://github.com/yegor256/0pdd) web apps (both open source),
+on top of Sinatra.
 
 ## How to contribute?
 
