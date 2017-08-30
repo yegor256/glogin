@@ -49,6 +49,7 @@ before '/*' do
       ).to_user
     rescue OpenSSL::Cipher::CipherError => _
       # Nothing happens here, the user is not logged in.
+      cookies.delete(:glogin)
     end
   end
 end
