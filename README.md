@@ -48,7 +48,7 @@ before '/*' do
         secret
       ).to_user
     rescue OpenSSL::Cipher::CipherError => _
-      @user = nil
+      # Nothing happens here, the user is not logged in.
     end
   end
 end
