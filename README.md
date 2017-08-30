@@ -41,7 +41,7 @@ require 'sinatra/cookies'
 before '/*' do
   if cookies[:glogin]
     begin
-      @user = Cookie::Closed.new(
+      @user = GLogin::Cookie::Closed.new(
         cookies[:glogin],
         # This must be some long text to be used to
         # encrypt the value in the cookie.
@@ -65,7 +65,7 @@ Next, we need a URL for GitHub OAuth callback:
 
 ```ruby
 get '/github-callback' do
-  cookies[:glogin] = Cookie::Open.new(
+  cookies[:glogin] = GLogin::Cookie::Open.new(
     settings.glogin.user(params[:code]),
     # The same encryption secret that we were using above:
     secret
