@@ -40,6 +40,7 @@ module GLogin
       @id = id
       raise "GitHub client secret can't be nil" if secret.nil?
       @secret = secret
+      raise "Redirect URL can't be nil" if redirect.nil?
       @redirect = redirect
     end
 
@@ -51,6 +52,7 @@ module GLogin
     end
 
     def user(code)
+      raise 'Code can\'t be nil' if code.nil?
       uri = URI.parse('https://api.github.com/user')
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = true
@@ -66,6 +68,7 @@ module GLogin
     private
 
     def access_token(code)
+      raise 'Code can\'t be nil' if code.nil?
       uri = URI.parse('https://github.com/login/oauth/access_token')
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = true
