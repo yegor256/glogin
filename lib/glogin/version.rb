@@ -25,5 +25,5 @@
 # Copyright:: Copyright (c) 2017-2018 Yegor Bugayenko
 # License:: MIT
 module GLogin
-  VERSION = '1.0.snapshot'.freeze
+  VERSION = '0.2.2'.freeze
 end
