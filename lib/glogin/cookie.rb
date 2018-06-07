@@ -36,7 +36,9 @@ module GLogin
     # Closed
     class Closed
       def initialize(text, secret)
+        raise 'Text can\'t be nil' if text.nil?
         @text = text
+        raise 'Secret can\'t be nil' if secret.nil?
         @secret = secret
       end
 
@@ -60,7 +62,9 @@ module GLogin
     # Open
     class Open
       def initialize(json, secret)
+        raise 'JSON can\'t be nil' if json.nil?
         @json = json
+        raise 'Secret can\'t be nil' if secret.nil?
         @secret = secret
       end
 
