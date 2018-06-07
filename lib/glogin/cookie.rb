@@ -49,7 +49,7 @@ module GLogin
           else
             cpr = Cookie.cipher
             cpr.decrypt
-            cpr.key = Digest::SHA1.hexdigest(@secret)
+            cpr.key = Cookie.digest(@secret)
             decrypted = cpr.update(Base64.decode64(@text))
             decrypted << cpr.final
             decrypted.to_s
@@ -71,11 +71,15 @@ module GLogin
       def to_s
         cpr = Cookie.cipher
         cpr.encrypt
-        cpr.key = Digest::SHA1.hexdigest(@secret)
+        cpr.key = Cookie.digest(@secret)
         encrypted = cpr.update("#{@json['login']}|#{@json['avatar_url']}")
         encrypted << cpr.final
         Base64.encode64(encrypted.to_s)
       end
+    end
+
+    def self.digest(secret)
+      Digest::SHA1.hexdigest(secret)[0..31]
     end
 
     def self.cipher
