@@ -93,7 +93,25 @@ settings.glogin.login_uri
 
 For unit testing you can just provide an empty string as a `secret` for
 `GLogin::Cookie::Open` and `GLogin::Cookie::Closed` and the encryption will be disabled:
-whatever will be coming from the cookie will be trusted.
+whatever will be coming from the cookie will be trusted. For testing
+it will be convenient to provide a user name in a query string, like:
+
+```
+http://localhost:9292/?glogin=tester
+```
+
+To enable that, it's recommended to add this line (see how
+it works in [zold-io/wts.zold.io](https://github.com/zold-io/wts.zold.io)):
+
+```ruby
+require 'sinatra/cookies'
+before '/*' do
+  cookies[:glogin] = params[:glogin] if params[:glogin]
+  if cookies[:glogin]
+    # same as above
+  end
+end
+```
 
 I use this gem in [sixnines](https://github.com/yegor256/sixnines)
 and [0pdd](https://github.com/yegor256/0pdd) web apps (both open source),
