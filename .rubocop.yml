@@ -3,6 +3,7 @@ AllCops:
     - 'bin/**/*'
     - 'assets/**/*'
   DisplayCopNames: true
+  TargetRubyVersion: 2.2
 
 Metrics/MethodLength:
   Enabled: false
@@ -10,3 +11,5 @@ Style/MultilineMethodCallIndentation:
   Enabled: false
 Metrics/AbcSize:
   Enabled: false
+Metrics/BlockLength:
+  Max: 30

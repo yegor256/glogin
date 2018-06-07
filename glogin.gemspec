@@ -1,4 +1,3 @@
-# encoding: utf-8
 #
 # Copyright (c) 2017-2018 Yegor Bugayenko
 #
@@ -22,7 +21,7 @@
 
 require 'English'
 
-lib = File.expand_path('../lib', __FILE__)
+lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require_relative 'lib/glogin/version'
 
@@ -31,8 +30,8 @@ Gem::Specification.new do |s|
   if s.respond_to? :required_rubygems_version=
     s.required_rubygems_version = Gem::Requirement.new('>= 0')
   end
-  s.rubygems_version = '2.2.2'
-  s.required_ruby_version = '~>2.0'
+  s.rubygems_version = '2.2'
+  s.required_ruby_version = '~>2.2'
   s.name = 'glogin'
   s.version = GLogin::VERSION
   s.license = 'MIT'
@@ -46,11 +45,11 @@ Gem::Specification.new do |s|
   s.test_files = s.files.grep(%r{^(test|features)/})
   s.rdoc_options = ['--charset=UTF-8']
   s.extra_rdoc_files = ['README.md', 'LICENSE.txt']
-  s.add_development_dependency 'rake', '12.0.0'
   s.add_development_dependency 'codecov', '0.1.10'
-  s.add_development_dependency 'rdoc', '4.2.0'
   s.add_development_dependency 'minitest', '5.5.0'
-  s.add_development_dependency 'rubocop', '0.41.2'
-  s.add_development_dependency 'rubocop-rspec', '1.5.1'
+  s.add_development_dependency 'rake', '12.0.0'
+  s.add_development_dependency 'rdoc', '4.2.0'
   s.add_development_dependency 'rspec-rails', '3.1.0'
+  s.add_development_dependency 'rubocop', '0.57'
+  s.add_development_dependency 'rubocop-rspec', '1.5.1'
 end

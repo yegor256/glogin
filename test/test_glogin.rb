@@ -1,4 +1,3 @@
-# encoding: utf-8
 #
 # Copyright (c) 2017-2018 Yegor Bugayenko
 #
@@ -29,5 +28,6 @@ require_relative '../lib/glogin'
 # License:: MIT
 class TestGLogin < Minitest::Test
   def test_basic
+    # Nothing yet
   end
 end

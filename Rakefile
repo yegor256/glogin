@@ -1,4 +1,3 @@
-# encoding: utf-8
 #
 # Copyright (c) 2017-2018 Yegor Bugayenko
 #
@@ -33,7 +32,7 @@ def version
   Gem::Specification.load(Dir['*.gemspec'].first).version
 end
 
-task default: [:clean, :test, :rubocop, :copyright]
+task default: %i[clean test rubocop copyright]
 
 require 'rake/testtask'
 desc 'Run all unit tests'
