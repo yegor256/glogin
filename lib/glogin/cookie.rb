@@ -32,15 +32,21 @@ module GLogin
   # Secure cookie
   #
   class Cookie
-    # Closed
+    # Closed cookie.
     class Closed
-      def initialize(text, secret)
+      def initialize(text, secret, context = '')
         raise 'Text can\'t be nil' if text.nil?
         @text = text
         raise 'Secret can\'t be nil' if secret.nil?
         @secret = secret
+        @context = context.to_s
       end
 
+      # Returns a hash with two elements: login and avatar.
+      # If the secret is empty, the text will be returned, without
+      # any decryption. If the data is not valid, an exception
+      # OpenSSL::Cipher::CipherError will be raised, which you have
+      # to catch in your applicaiton and ignore the login attempt.
       def to_user
         plain =
           if @secret.empty?
@@ -53,25 +59,36 @@ module GLogin
             decrypted << cpr.final
             decrypted.to_s
           end
-        parts = plain.split('|')
+        parts = plain.split('|', 3)
+        unless parts[2].to_s == @context
+          raise(
+            OpenSSL::Cipher::CipherError,
+            "Context '#{@context}' expectected, but '#{parts[2]}' found"
+          )
+        end
         { login: parts[0], avatar: parts[1] }
       end
     end
 
     # Open
     class Open
-      def initialize(json, secret)
+      # Here comes the JSON you receive from Auth.user()
+      def initialize(json, secret, context = '')
         raise 'JSON can\'t be nil' if json.nil?
         @json = json
         raise 'Secret can\'t be nil' if secret.nil?
         @secret = secret
+        @context = context.to_s
       end
 
+      # Returns the text you should drop back to the user as a cookie.
       def to_s
         cpr = Cookie.cipher
         cpr.encrypt
         cpr.key = Cookie.digest(@secret)
-        encrypted = cpr.update("#{@json['login']}|#{@json['avatar_url']}")
+        encrypted = cpr.update(
+          "#{@json['login']}|#{@json['avatar_url']}|#{@context}"
+        )
         encrypted << cpr.final
         Base64.encode64(encrypted.to_s)
       end

@@ -39,6 +39,22 @@ class TestCookie < Minitest::Test
     assert_equal(user[:avatar], 'https://avatars1.githubusercontent.com/u/526301')
   end
 
+  def test_encrypts_and_decrypts_with_context
+    secret = 'kfdj7hjsywhs6hjshr7shsw990s'
+    context = '127.0.0.1'
+    user = GLogin::Cookie::Closed.new(
+      GLogin::Cookie::Open.new(
+        JSON.parse('{"login":"jeffrey","avatar_url":"#"}'),
+        secret,
+        context
+      ).to_s,
+      secret,
+      context
+    ).to_user
+    assert_equal(user[:login], 'jeffrey')
+    assert_equal(user[:avatar], '#')
+  end
+
   def test_decrypts_in_test_mode
     user = GLogin::Cookie::Closed.new(
       'test|http://example.com', ''
@@ -55,6 +71,21 @@ class TestCookie < Minitest::Test
           'secret-1'
         ).to_s,
         'secret-2'
+      ).to_user
+    end
+  end
+
+  def test_fails_on_wrong_context
+    secret = 'fdjruewoijs789fdsufds89f7ds89fs'
+    assert_raises OpenSSL::Cipher::CipherError do
+      GLogin::Cookie::Closed.new(
+        GLogin::Cookie::Open.new(
+          JSON.parse('{"login":"x","avatar_url":"x"}'),
+          secret,
+          'context-1'
+        ).to_s,
+        secret,
+        'context-2'
       ).to_user
     end
   end
