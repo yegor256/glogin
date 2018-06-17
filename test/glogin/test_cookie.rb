@@ -63,6 +63,14 @@ class TestCookie < Minitest::Test
     assert_equal(user[:avatar], 'http://example.com')
   end
 
+  def test_decrypts_in_test_mode_with_context
+    user = GLogin::Cookie::Closed.new(
+      'tester', '', 'some context'
+    ).to_user
+    assert_equal('tester', user[:login])
+    assert_nil(user[:avatar])
+  end
+
   def test_fails_on_broken_text
     assert_raises OpenSSL::Cipher::CipherError do
       GLogin::Cookie::Closed.new(

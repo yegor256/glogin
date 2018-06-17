@@ -60,10 +60,10 @@ module GLogin
             decrypted.to_s
           end
         parts = plain.split('|', 3)
-        unless parts[2].to_s == @context
+        if !@secret.empty? && parts[2].to_s != @context
           raise(
             OpenSSL::Cipher::CipherError,
-            "Context '#{@context}' expectected, but '#{parts[2]}' found"
+            "Context '#{@context}' expected, but '#{parts[2]}' found"
           )
         end
         { login: parts[0], avatar: parts[1] }
