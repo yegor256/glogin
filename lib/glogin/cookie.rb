@@ -48,17 +48,7 @@ module GLogin
       # OpenSSL::Cipher::CipherError will be raised, which you have
       # to catch in your applicaiton and ignore the login attempt.
       def to_user
-        plain =
-          if @secret.empty?
-            @text
-          else
-            cpr = Cookie.cipher
-            cpr.decrypt
-            cpr.key = Cookie.digest(@secret)
-            decrypted = cpr.update(Base64.decode64(@text))
-            decrypted << cpr.final
-            decrypted.to_s
-          end
+        plain = Codec.new(@secret).decrypt(@text)
         parts = plain.split('|', 3)
         if !@secret.empty? && parts[2].to_s != @context
           raise(
@@ -83,23 +73,10 @@ module GLogin
 
       # Returns the text you should drop back to the user as a cookie.
       def to_s
-        cpr = Cookie.cipher
-        cpr.encrypt
-        cpr.key = Cookie.digest(@secret)
-        encrypted = cpr.update(
+        Codec.new(@secret).encrypt(
           "#{@json['login']}|#{@json['avatar_url']}|#{@context}"
         )
-        encrypted << cpr.final
-        Base64.encode64(encrypted.to_s)
       end
-    end
-
-    def self.digest(secret)
-      Digest::SHA1.hexdigest(secret)[0..31]
-    end
-
-    def self.cipher
-      OpenSSL::Cipher.new('aes-256-cbc')
     end
   end
 end
