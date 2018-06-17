@@ -39,6 +39,7 @@ module GLogin
     end
 
     def decrypt(text)
+      raise 'Text can\'t be nil' if text.nil?
       if @secret.empty?
         text
       else
@@ -56,6 +57,7 @@ module GLogin
     end
 
     def encrypt(text)
+      raise 'Text can\'t be nil' if text.nil?
       cpr = cipher
       cpr.encrypt
       cpr.key = digest
