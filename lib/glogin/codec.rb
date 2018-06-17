@@ -19,6 +19,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+require 'securerandom'
 require 'openssl'
 require 'digest/sha1'
 require 'base64'
@@ -48,7 +49,9 @@ module GLogin
         raise OpenSSL::Cipher::CipherError if plain.empty?
         decrypted = cpr.update(plain)
         decrypted << cpr.final
-        decrypted.to_s.force_encoding('UTF-8')
+        salt, body = decrypted.to_s.force_encoding('UTF-8').split(' ', 2)
+        raise OpenSSL::Cipher::CipherError if salt.empty?
+        body
       end
     end
 
@@ -56,7 +59,8 @@ module GLogin
       cpr = cipher
       cpr.encrypt
       cpr.key = digest
-      encrypted = cpr.update(text)
+      salt = SecureRandom.base64(Random.rand(8..32))
+      encrypted = cpr.update(salt + ' ' + text)
       encrypted << cpr.final
       Base64.encode64(encrypted.to_s)
     end

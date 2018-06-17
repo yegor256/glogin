@@ -49,14 +49,14 @@ module GLogin
       # to catch in your applicaiton and ignore the login attempt.
       def to_user
         plain = Codec.new(@secret).decrypt(@text)
-        parts = plain.split('|', 3)
-        if !@secret.empty? && parts[2].to_s != @context
+        login, avatar, ctx = plain.split('|', 3)
+        if !@secret.empty? && ctx.to_s != @context
           raise(
             OpenSSL::Cipher::CipherError,
-            "Context '#{@context}' expected, but '#{parts[2]}' found"
+            "Context '#{@context}' expected, but '#{ctx}' found"
           )
         end
-        { login: parts[0], avatar: parts[1] }
+        { login: login, avatar: avatar }
       end
     end
 
@@ -74,7 +74,11 @@ module GLogin
       # Returns the text you should drop back to the user as a cookie.
       def to_s
         Codec.new(@secret).encrypt(
-          "#{@json['login']}|#{@json['avatar_url']}|#{@context}"
+          [
+            @json['login'],
+            @json['avatar_url'],
+            @context
+          ].join('|')
         )
       end
     end
