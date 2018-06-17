@@ -5,7 +5,7 @@
 [![Build Status](https://travis-ci.org/yegor256/glogin.svg)](https://travis-ci.org/yegor256/glogin)
 [![PDD status](http://www.0pdd.com/svg?name=yegor256/glogin)](http://www.0pdd.com/p?name=yegor256/glogin)
 [![Gem Version](https://badge.fury.io/rb/glogin.svg)](http://badge.fury.io/rb/glogin)
-[![Code Climate](http://img.shields.io/codeclimate/github/yegor256/glogin.svg)](https://codeclimate.com/github/yegor256/glogin)
+[![Maintainability](https://api.codeclimate.com/v1/badges/155f86b639d155259219/maintainability)](https://codeclimate.com/github/yegor256/glogin/maintainability)
 [![Test Coverage](https://img.shields.io/codecov/c/github/yegor256/glogin.svg)](https://codecov.io/github/yegor256/glogin?branch=master)
 
 ## GitHub Login for Ruby web app
