@@ -99,7 +99,7 @@ module GLogin
     end
 
     def self.cipher
-      OpenSSL::Cipher::Cipher.new('aes-256-cbc')
+      OpenSSL::Cipher.new('aes-256-cbc')
     end
   end
 end
