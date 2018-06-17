@@ -84,6 +84,12 @@ get '/logout' do
 end
 ```
 
+It is recommended to provide the third "context" parameter to
+`GLogin::Cookie::Closed` and `GLogin::Cookie::Open` constructors, in order
+to enforce stronger security. The context may include the `User-Agent`
+HTTP header of the user, their IP address, and so on. When anything
+changes on the user side, they will be forced to re-login.
+
 One more thing is the login URL you will need for your front page. Here
 it is:
 
