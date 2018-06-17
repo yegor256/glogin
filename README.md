@@ -122,7 +122,7 @@ I use this gem in [sixnines](https://github.com/yegor256/sixnines)
 and [0pdd](https://github.com/yegor256/0pdd) web apps (both open source),
 on top of Sinatra.
 
-Also, you can use GLogin::Codec just to encrypt/decrypt a piece of text:
+Also, you can use `GLogin::Codec` just to encrypt/decrypt a piece of text:
 
 ```ruby
 require 'glogin/codec'
