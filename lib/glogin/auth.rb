@@ -23,7 +23,6 @@ require 'net/http'
 require 'uri'
 require 'json'
 require 'cgi'
-require 'digest'
 
 # GLogin main module.
 # Author:: Yegor Bugayenko (yegor256@gmail.com)
@@ -61,9 +60,7 @@ module GLogin
       req['Authorization'] = "token #{access_token(code)}"
       res = http.request(req)
       raise "Error (#{res.code}): #{res.body}" unless res.code == '200'
-      json = JSON.parse(res.body)
-      json['bearer'] = Digest::SHA256.hexdigest(code)[0, 32]
-      json
+      JSON.parse(res.body)
     end
 
     private

@@ -40,7 +40,7 @@ class TestAuth < Minitest::Test
       }.to_json
     )
     user = auth.user('437849732894732')
-    assert_equal('2a33088dd3662a62bac11c27f0c30061', user['bearer'])
+    assert_equal('yegor256', user['login'])
   end
 
   def test_login_uri
