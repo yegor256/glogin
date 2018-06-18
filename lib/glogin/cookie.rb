@@ -52,14 +52,14 @@ module GLogin
       # to catch in your applicaiton and ignore the login attempt.
       def to_user
         plain = Codec.new(@secret).decrypt(@text)
-        login, avatar, auth_code, ctx = plain.split(GLogin::SPLIT, 4)
+        login, avatar, code, ctx = plain.split(GLogin::SPLIT, 4)
         if !@secret.empty? && ctx.to_s != @context
           raise(
             OpenSSL::Cipher::CipherError,
             "Context '#{@context}' expected, but '#{ctx}' found"
           )
         end
-        { login: login, avatar: avatar, auth_code: auth_code }
+        { login: login, avatar: avatar, code: code }
       end
     end
 
