@@ -20,9 +20,30 @@
 # SOFTWARE.
 
 require 'minitest/autorun'
+require 'webmock/minitest'
 require_relative '../../lib/glogin/cookie'
 
 class TestAuth < Minitest::Test
+  def test_authenticate_via_https
+    auth = GLogin::Auth.new('1234', '4433', 'https://example.org')
+    stub_request(:post, 'https://github.com/login/oauth/access_token').to_return(
+      status: 200,
+      body: {
+        access_token: 'some-token'
+      }.to_json
+    )
+    auth_code = '437849732894732'
+    stub_request(:get, 'https://api.github.com/user').to_return(
+      status: 200,
+      body: {
+        auth_code: auth_code,
+        login: 'yegor256'
+      }.to_json
+    )
+    user = auth.user(auth_code)
+    assert_equal(auth_code, user['auth_code'])
+  end
+
   def test_login_uri
     auth = GLogin::Auth.new(
       'client_id', 'client_secret', 'http://www.example.com/github-oauth'

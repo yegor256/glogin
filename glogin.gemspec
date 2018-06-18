@@ -42,7 +42,7 @@ Gem::Specification.new do |s|
   s.homepage = 'http://github.com/yegor256/glogin'
   s.files = `git ls-files`.split($RS)
   s.executables = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
-  s.test_files = s.files.grep(%r{^(test|features)/})
+  s.test_files = s.files.grep(%r{^(test)/})
   s.rdoc_options = ['--charset=UTF-8']
   s.extra_rdoc_files = ['README.md', 'LICENSE.txt']
   s.add_development_dependency 'codecov', '~>0.1'
@@ -52,4 +52,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rspec-rails', '~>3.1'
   s.add_development_dependency 'rubocop', '~>0.57'
   s.add_development_dependency 'rubocop-rspec', '~>1.5'
+  s.add_development_dependency 'webmock', '~>3.4'
 end
