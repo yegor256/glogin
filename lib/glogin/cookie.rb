@@ -28,6 +28,9 @@ require 'base64'
 # Copyright:: Copyright (c) 2017-2018 Yegor Bugayenko
 # License:: MIT
 module GLogin
+  # Split symbol inside the cookie text
+  SPLIT = '|'.freeze
+
   #
   # Secure cookie
   #
@@ -49,14 +52,14 @@ module GLogin
       # to catch in your applicaiton and ignore the login attempt.
       def to_user
         plain = Codec.new(@secret).decrypt(@text)
-        login, avatar, ctx = plain.split('|', 3)
+        login, avatar, auth_code, ctx = plain.split(GLogin::SPLIT, 4)
         if !@secret.empty? && ctx.to_s != @context
           raise(
             OpenSSL::Cipher::CipherError,
             "Context '#{@context}' expected, but '#{ctx}' found"
           )
         end
-        { login: login, avatar: avatar }
+        { login: login, avatar: avatar, auth_code: auth_code }
       end
     end
 
@@ -77,8 +80,9 @@ module GLogin
           [
             @json['login'],
             @json['avatar_url'],
+            @json['auth_code'],
             @context
-          ].join('|')
+          ].join(GLogin::SPLIT)
         )
       end
     end
