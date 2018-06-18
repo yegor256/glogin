@@ -21,9 +21,9 @@
 
 require 'net/http'
 require 'uri'
-require 'yaml'
 require 'json'
 require 'cgi'
+require 'digest'
 
 # GLogin main module.
 # Author:: Yegor Bugayenko (yegor256@gmail.com)
@@ -50,7 +50,7 @@ module GLogin
         CGI.escape(@redirect)
     end
 
-    def user(code)
+    def user(code, context = '')
       raise 'Code can\'t be nil' if code.nil?
       uri = URI.parse('https://api.github.com/user')
       http = Net::HTTP.new(uri.host, uri.port)
@@ -62,7 +62,7 @@ module GLogin
       res = http.request(req)
       raise "Error (#{res.code}): #{res.body}" unless res.code == '200'
       json = JSON.parse(res.body)
-      json['auth_code'] = code
+      json['bearer'] = Digest::SHA256.hexdigest(code + context)[0, 32]
       json
     end
 

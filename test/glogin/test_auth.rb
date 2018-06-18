@@ -32,16 +32,15 @@ class TestAuth < Minitest::Test
         access_token: 'some-token'
       }.to_json
     )
-    auth_code = '437849732894732'
     stub_request(:get, 'https://api.github.com/user').to_return(
       status: 200,
       body: {
-        auth_code: auth_code,
+        auth_code: '437849732894732',
         login: 'yegor256'
       }.to_json
     )
-    user = auth.user(auth_code)
-    assert_equal(auth_code, user['auth_code'])
+    user = auth.user('437849732894732')
+    assert_equal('2a33088dd3662a62bac11c27f0c30061', user['bearer'])
   end
 
   def test_login_uri
