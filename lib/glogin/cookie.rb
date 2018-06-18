@@ -22,6 +22,7 @@
 require 'openssl'
 require 'digest/sha1'
 require 'base64'
+require_relative 'codec'
 
 # GLogin main module.
 # Author:: Yegor Bugayenko (yegor256@gmail.com)
