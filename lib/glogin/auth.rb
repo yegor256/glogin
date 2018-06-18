@@ -50,7 +50,7 @@ module GLogin
         CGI.escape(@redirect)
     end
 
-    def user(code, context = '')
+    def user(code)
       raise 'Code can\'t be nil' if code.nil?
       uri = URI.parse('https://api.github.com/user')
       http = Net::HTTP.new(uri.host, uri.port)
@@ -62,7 +62,7 @@ module GLogin
       res = http.request(req)
       raise "Error (#{res.code}): #{res.body}" unless res.code == '200'
       json = JSON.parse(res.body)
-      json['bearer'] = Digest::SHA256.hexdigest(code + context)[0, 32]
+      json['bearer'] = Digest::SHA256.hexdigest(code)[0, 32]
       json
     end
 

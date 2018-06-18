@@ -122,6 +122,50 @@ I use this gem in [sixnines](https://github.com/yegor256/sixnines)
 and [0pdd](https://github.com/yegor256/0pdd) web apps (both open source),
 on top of Sinatra.
 
+For better security it is recommended to use "bearer" codes.
+First, you create a global map of that codes, somewhere where your
+application starts (I'm using [`Concurrent::Map`](https://ruby-concurrency.github.io/concurrent-ruby/Concurrent/Map.html)):
+
+```ruby
+require 'concurrent'
+configure do
+  set :bearers, Concurrent::Map.new
+end
+```
+
+Then, you pass a context to the `user()` method and save the bearer
+code in the map:
+
+```ruby
+get '/github-callback' do
+  user = settings.glogin.user(params[:code], "#{request.ip} #{request.user_agent}")
+  settings.bearers[user[:login]] = user[:bearer]
+  cookies[:glogin] = GLogin::Cookie::Open.new(user, secret).to_s
+  redirect to('/')
+end
+```
+
+Finally, you make sure that the incoming cookie has the right bearer code:
+
+```ruby
+before '/*' do
+  if cookies[:glogin]
+    begin
+      user = GLogin::Cookie::Closed.new(
+        cookies[:glogin], secret
+      ).to_user
+      if user[:bearer] == settings.bearers[user[:login]]
+        @user = user
+      end
+    rescue OpenSSL::Cipher::CipherError => _
+      cookies.delete(:glogin)
+    end
+  end
+```
+
+Now it will not be possible to login from a different, even if the cookie is known.
+
+
 Also, you can use `GLogin::Codec` just to encrypt/decrypt a piece of text:
 
 ```ruby
