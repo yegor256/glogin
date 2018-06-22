@@ -52,6 +52,7 @@ module GLogin
         decrypted << cpr.final
         salt, body = decrypted.to_s.force_encoding('UTF-8').split(' ', 2)
         raise OpenSSL::Cipher::CipherError if salt.empty?
+        raise OpenSSL::Cipher::CipherError if body.nil?
         body
       end
     end
