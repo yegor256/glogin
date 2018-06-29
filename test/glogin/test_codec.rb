@@ -45,6 +45,12 @@ class TestCodec < Minitest::Test
     end
   end
 
+  def test_encrypts_into_plain_string
+    text = GLogin::Codec.new('6hFGrte5LLmwi').encrypt("K&j\n\n\tuIpwp00{]=")
+    assert(text =~ /^[a-zA-Z0-9\/=+]+$/m, text)
+    assert(!text.include?("\n"), text)
+  end
+
   def test_decrypts_broken_text
     assert_raises OpenSSL::Cipher::CipherError do
       GLogin::Codec.new('the key').decrypt('этот текст не был зашифрован')

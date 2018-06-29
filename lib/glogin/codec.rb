@@ -65,7 +65,7 @@ module GLogin
       salt = SecureRandom.base64(Random.rand(8..32))
       encrypted = cpr.update(salt + ' ' + text)
       encrypted << cpr.final
-      Base64.encode64(encrypted.to_s)
+      Base64.encode64(encrypted.to_s).gsub("\n", '')
     end
 
     def digest
