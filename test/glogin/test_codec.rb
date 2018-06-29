@@ -47,7 +47,7 @@ class TestCodec < Minitest::Test
 
   def test_encrypts_into_plain_string
     text = GLogin::Codec.new('6hFGrte5LLmwi').encrypt("K&j\n\n\tuIpwp00{]=")
-    assert(text =~ /^[a-zA-Z0-9\/=+]+$/m, text)
+    assert(text =~ %r{^[a-zA-Z0-9/=+]+$}, text)
     assert(!text.include?("\n"), text)
   end
 
