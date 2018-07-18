@@ -13,3 +13,7 @@ Metrics/AbcSize:
   Enabled: false
 Metrics/BlockLength:
   Max: 30
+Metrics/CyclomaticComplexity:
+  Max: 10
+Metrics/PerceivedComplexity:
+  Max: 10

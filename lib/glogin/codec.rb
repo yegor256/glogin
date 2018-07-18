@@ -50,8 +50,10 @@ module GLogin
         raise OpenSSL::Cipher::CipherError if plain.empty?
         decrypted = cpr.update(plain)
         decrypted << cpr.final
-        salt, body = decrypted.to_s.force_encoding('UTF-8').split(' ', 2)
+        salt, encoding, body = decrypted.to_s.split(' ', 3)
+        body.force_encoding(encoding)
         raise OpenSSL::Cipher::CipherError if salt.empty?
+        raise OpenSSL::Cipher::CipherError if encoding.nil?
         raise OpenSSL::Cipher::CipherError if body.nil?
         body
       end
@@ -63,7 +65,7 @@ module GLogin
       cpr.encrypt
       cpr.key = digest
       salt = SecureRandom.base64(Random.rand(8..32))
-      encrypted = cpr.update(salt + ' ' + text)
+      encrypted = cpr.update(salt + ' ' + text.encoding.to_s + ' ' + text)
       encrypted << cpr.final
       Base64.encode64(encrypted.to_s).delete("\n")
     end
