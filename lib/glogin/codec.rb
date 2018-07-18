@@ -51,7 +51,11 @@ module GLogin
         decrypted = cpr.update(plain)
         decrypted << cpr.final
         salt, encoding, body = decrypted.to_s.split(' ', 3)
-        body.force_encoding(encoding)
+        begin
+          body.force_encoding(encoding)
+        rescue ArgumentError => _
+          raise OpenSSL::Cipher::CipherError
+        end
         raise OpenSSL::Cipher::CipherError if salt.empty?
         raise OpenSSL::Cipher::CipherError if encoding.nil?
         raise OpenSSL::Cipher::CipherError if body.nil?
