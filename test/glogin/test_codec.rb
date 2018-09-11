@@ -56,4 +56,10 @@ class TestCodec < Minitest::Test
       GLogin::Codec.new('the key').decrypt('этот текст не был зашифрован')
     end
   end
+
+  def test_encrypts_and_decrypts_with_empty_key
+    crypt = GLogin::Codec.new
+    text = 'This is the text, дорогой друг!'
+    assert_equal(text, crypt.decrypt(crypt.encrypt(text)))
+  end
 end

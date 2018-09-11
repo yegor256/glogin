@@ -33,7 +33,7 @@ module GLogin
   # Codec
   #
   class Codec
-    def initialize(secret)
+    def initialize(secret = '')
       raise 'Secret can\'t be nil' if secret.nil?
       @secret = secret
     end
@@ -60,13 +60,17 @@ module GLogin
 
     def encrypt(text)
       raise 'Text can\'t be nil' if text.nil?
-      cpr = cipher
-      cpr.encrypt
-      cpr.key = digest
-      salt = SecureRandom.base64(Random.rand(8..32))
-      encrypted = cpr.update(salt + ' ' + text)
-      encrypted << cpr.final
-      Base64.encode64(encrypted.to_s).delete("\n")
+      if @secret.empty?
+        text
+      else
+        cpr = cipher
+        cpr.encrypt
+        cpr.key = digest
+        salt = SecureRandom.base64(Random.rand(8..32))
+        encrypted = cpr.update(salt + ' ' + text)
+        encrypted << cpr.final
+        Base64.encode64(encrypted.to_s).delete("\n")
+      end
     end
 
     def digest
