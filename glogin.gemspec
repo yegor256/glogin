@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 #
-# Copyright (c) 2017-2018 Yegor Bugayenko
+# Copyright (c) 2017-2019 Yegor Bugayenko
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the 'Software'), to deal
@@ -31,7 +33,7 @@ Gem::Specification.new do |s|
     s.required_rubygems_version = Gem::Requirement.new('>= 0')
   end
   s.rubygems_version = '2.2'
-  s.required_ruby_version = '~>2.2'
+  s.required_ruby_version = '~>2.3'
   s.name = 'glogin'
   s.version = GLogin::VERSION
   s.license = 'MIT'
@@ -45,12 +47,12 @@ Gem::Specification.new do |s|
   s.test_files = s.files.grep(%r{^(test)/})
   s.rdoc_options = ['--charset=UTF-8']
   s.extra_rdoc_files = ['README.md', 'LICENSE.txt']
-  s.add_development_dependency 'codecov', '~>0.1'
-  s.add_development_dependency 'minitest', '~>5.5'
-  s.add_development_dependency 'rake', '~>12.0'
-  s.add_development_dependency 'rdoc', '~>4.2'
-  s.add_development_dependency 'rspec-rails', '~>3.1'
-  s.add_development_dependency 'rubocop', '~>0.57'
-  s.add_development_dependency 'rubocop-rspec', '~>1.5'
-  s.add_development_dependency 'webmock', '~>3.4'
+  s.add_development_dependency 'codecov', '0.1.14'
+  s.add_development_dependency 'minitest', '5.11.3'
+  s.add_development_dependency 'rake', '12.3.2'
+  s.add_development_dependency 'rdoc', '4.3.0'
+  s.add_development_dependency 'rspec-rails', '3.8.2'
+  s.add_development_dependency 'rubocop', '0.65.0'
+  s.add_development_dependency 'rubocop-rspec', '1.32.0'
+  s.add_development_dependency 'webmock', '3.5.1'
 end

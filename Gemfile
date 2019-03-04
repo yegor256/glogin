@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 #
-# Copyright (c) 2017-2018 Yegor Bugayenko
+# Copyright (c) 2017-2019 Yegor Bugayenko
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the 'Software'), to deal
@@ -20,4 +22,5 @@
 # SOFTWARE.
 
 source 'https://rubygems.org'
+ruby '~>2.3'
 gemspec

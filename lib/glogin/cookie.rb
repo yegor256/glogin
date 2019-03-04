@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 #
-# Copyright (c) 2017-2018 Yegor Bugayenko
+# Copyright (c) 2017-2019 Yegor Bugayenko
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the 'Software'), to deal
@@ -26,11 +28,11 @@ require_relative 'codec'
 
 # GLogin main module.
 # Author:: Yegor Bugayenko (yegor256@gmail.com)
-# Copyright:: Copyright (c) 2017-2018 Yegor Bugayenko
+# Copyright:: Copyright (c) 2017-2019 Yegor Bugayenko
 # License:: MIT
 module GLogin
   # Split symbol inside the cookie text
-  SPLIT = '|'.freeze
+  SPLIT = '|'
 
   #
   # Secure cookie
@@ -75,12 +77,22 @@ module GLogin
         @context = context.to_s
       end
 
+      # GitHub login name of the authenticated user
+      def login
+        @json['login']
+      end
+
+      # GitHub avatar URL of the authenticated user
+      def avatar_url
+        @json['avatar_url']
+      end
+
       # Returns the text you should drop back to the user as a cookie.
       def to_s
         Codec.new(@secret).encrypt(
           [
-            @json['login'],
-            @json['avatar_url'],
+            login,
+            avatar_url,
             @json['bearer'],
             @context
           ].join(GLogin::SPLIT)
