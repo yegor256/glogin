@@ -29,13 +29,11 @@ class TestAuth < Minitest::Test
   def test_authenticate_via_https
     auth = GLogin::Auth.new('1234', '4433', 'https://example.org')
     stub_request(:post, 'https://github.com/login/oauth/access_token').to_return(
-      status: 200,
       body: {
         access_token: 'some-token'
       }.to_json
     )
     stub_request(:get, 'https://api.github.com/user').to_return(
-      status: 200,
       body: {
         auth_code: '437849732894732',
         login: 'yegor256'

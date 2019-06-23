@@ -1,3 +1,5 @@
+<img src="/logo.svg" width="64px" height="64px"/>
+
 [![Managed by Zerocracy](https://www.0crat.com/badge/C3RFVLU72.svg)](https://www.0crat.com/p/C3RFVLU72)
 [![DevOps By Rultor.com](http://www.rultor.com/b/yegor256/glogin)](http://www.rultor.com/p/yegor256/glogin)
 [![We recommend RubyMine](https://www.elegantobjects.org/rubymine.svg)](https://www.jetbrains.com/ruby/)
@@ -9,13 +11,17 @@
 [![Test Coverage](https://img.shields.io/codecov/c/github/yegor256/glogin.svg)](https://codecov.io/github/yegor256/glogin?branch=master)
 [![Yard Docs](http://img.shields.io/badge/yard-docs-blue.svg)](http://rubydoc.info/github/yegor256/glogin/master/frames)
 
-## GitHub Login for Ruby web app
+[![Hits-of-Code](https://hitsofcode.com/github/yegor256/glogin)](https://hitsofcode.com/view/github/yegor256/glogin)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/yegor256/glogin/blob/master/LICENSE.txt)
 
 This simple gem will help you enable login/logout through
 [GitHub OAuth](https://developer.github.com/apps/building-integrations/setting-up-and-registering-oauth-apps/)
 for your web application. This is how it works with
 [Sinatra](http://www.sinatrarb.com/),
 but you can do something similar in any framework.
+
+Read this blog post to get the idea:
+[_Simplified GitHub Login for a Ruby Web App_](https://www.yegor256.com/2018/06/19/glogin.html)
 
 First, somewhere in the global space, before the app starts:
 
@@ -132,7 +138,7 @@ encrypted = codec.encrypt('Hello, world!')
 decrypted = codec.decrypt(encrypted)
 ```
 
-# How to contribute
+## How to contribute
 
 Read [these guidelines](https://www.yegor256.com/2014/04/15/github-guidelines.html).
 Make sure you build is green before you contribute
@@ -141,31 +147,7 @@ your pull request. You will need to have [Ruby](https://www.ruby-lang.org/en/) 2
 
 ```
 $ bundle update
-$ rake
+$ bundle exec rake
 ```
 
 If it's clean and you don't see any error messages, submit your pull request.
-
-## License
-
-(The MIT License)
-
-Copyright (c) 2017-2019 Yegor Bugayenko
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
