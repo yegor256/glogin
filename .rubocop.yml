@@ -7,6 +7,8 @@ AllCops:
 
 Metrics/MethodLength:
   Enabled: false
+Style/ClassAndModuleChildren:
+  Enabled: false
 Layout/MultilineMethodCallIndentation:
   Enabled: false
 Metrics/AbcSize:

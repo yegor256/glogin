@@ -24,63 +24,64 @@
 require 'securerandom'
 require 'openssl'
 require 'digest/sha1'
-require 'base64'
+require 'base58'
 
 # Codec.
 # Author:: Yegor Bugayenko (yegor256@gmail.com)
 # Copyright:: Copyright (c) 2017-2019 Yegor Bugayenko
 # License:: MIT
-module GLogin
-  #
-  # Codec
-  #
-  class Codec
-    def initialize(secret = '')
-      raise 'Secret can\'t be nil' if secret.nil?
-      @secret = secret
-    end
+class GLogin::Codec
+  # When can't decode.
+  class DecodingError < StandardError; end
 
-    def decrypt(text)
-      raise 'Text can\'t be nil' if text.nil?
-      if @secret.empty?
-        text
-      else
-        cpr = cipher
-        cpr.decrypt
-        cpr.key = digest
-        plain = Base64.decode64(text)
-        raise OpenSSL::Cipher::CipherError if plain.empty?
-        decrypted = cpr.update(plain)
-        decrypted << cpr.final
-        salt, body = decrypted.to_s.split(' ', 2)
-        raise OpenSSL::Cipher::CipherError if salt.empty?
-        raise OpenSSL::Cipher::CipherError if body.nil?
-        body.force_encoding('UTF-8')
-        body
-      end
-    end
+  def initialize(secret = '')
+    raise 'Secret can\'t be nil' if secret.nil?
+    @secret = secret
+  end
 
-    def encrypt(text)
-      raise 'Text can\'t be nil' if text.nil?
-      if @secret.empty?
-        text
-      else
-        cpr = cipher
-        cpr.encrypt
-        cpr.key = digest
-        salt = SecureRandom.base64(Random.rand(8..32))
-        encrypted = cpr.update(salt + ' ' + text)
-        encrypted << cpr.final
-        Base64.encode64(encrypted.to_s).delete("\n")
-      end
+  def decrypt(text)
+    raise 'Text can\'t be nil' if text.nil?
+    if @secret.empty?
+      text
+    else
+      cpr = cipher
+      cpr.decrypt
+      cpr.key = digest
+      raise DecodingError unless /^[a-zA-Z0-9]+$/.match?(text)
+      plain = Base58.base58_to_binary(text)
+      raise DecodingError if plain.empty?
+      decrypted = cpr.update(plain)
+      decrypted << cpr.final
+      salt, body = decrypted.to_s.split(' ', 2)
+      raise DecodingError if salt.empty?
+      raise OpenSSL::Cipher::CipherError if body.nil?
+      body.force_encoding('UTF-8')
+      body
     end
+  rescue OpenSSL::Cipher::CipherError => e
+    raise DecodingError, e.message
+  end
 
-    def digest
-      Digest::SHA1.hexdigest(@secret)[0..31]
+  def encrypt(text)
+    raise 'Text can\'t be nil' if text.nil?
+    if @secret.empty?
+      text
+    else
+      cpr = cipher
+      cpr.encrypt
+      cpr.key = digest
+      salt = SecureRandom.base64(Random.rand(8..32))
+      encrypted = cpr.update(salt + ' ' + text)
+      encrypted << cpr.final
+      Base58.binary_to_base58(encrypted)
     end
+  end
 
-    def cipher
-      OpenSSL::Cipher.new('aes-256-cbc')
-    end
+  def digest
+    Digest::SHA1.hexdigest(@secret)[0..31]
+  end
+
+  def cipher
+    OpenSSL::Cipher.new('aes-256-cbc')
   end
 end

@@ -22,6 +22,7 @@
 # SOFTWARE.
 
 require 'minitest/autorun'
+require 'base64'
 require_relative '../../lib/glogin/codec'
 
 class TestCodec < Minitest::Test
@@ -40,7 +41,7 @@ class TestCodec < Minitest::Test
   end
 
   def test_decrypts_with_invalid_password
-    assert_raises OpenSSL::Cipher::CipherError do
+    assert_raises GLogin::Codec::DecodingError do
       GLogin::Codec.new('the wrong key').decrypt(
         GLogin::Codec.new('the right key').encrypt('the text')
       )
@@ -49,12 +50,12 @@ class TestCodec < Minitest::Test
 
   def test_encrypts_into_plain_string
     text = GLogin::Codec.new('6hFGrte5LLmwi').encrypt("K&j\n\n\tuIpwp00{]=")
-    assert(text =~ %r{^[a-zA-Z0-9/=+]+$}, text)
+    assert(text =~ /^[a-zA-Z0-9]+$/, text)
     assert(!text.include?("\n"), text)
   end
 
   def test_decrypts_broken_text
-    assert_raises OpenSSL::Cipher::CipherError do
+    assert_raises GLogin::Codec::DecodingError do
       GLogin::Codec.new('the key').decrypt('этот текст не был зашифрован')
     end
   end

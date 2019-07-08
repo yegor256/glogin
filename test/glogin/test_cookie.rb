@@ -74,7 +74,7 @@ class TestCookie < Minitest::Test
   end
 
   def test_fails_on_broken_text
-    assert_raises OpenSSL::Cipher::CipherError do
+    assert_raises GLogin::Codec::DecodingError do
       GLogin::Cookie::Closed.new(
         GLogin::Cookie::Open.new(
           JSON.parse('{"login":"x","avatar_url":"x"}'),
