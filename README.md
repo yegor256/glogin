@@ -53,7 +53,7 @@ before '/*' do
         # encrypt the value in the cookie.
         secret
       ).to_user
-    rescue OpenSSL::Cipher::CipherError => _
+    rescue GLogin::Codec::DecodingError => _
       # Nothing happens here, the user is not logged in.
       cookies.delete(:glogin)
     end

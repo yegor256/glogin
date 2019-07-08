@@ -54,7 +54,7 @@ class GLogin::Codec
       decrypted << cpr.final
       salt, body = decrypted.to_s.split(' ', 2)
       raise DecodingError if salt.empty?
-      raise OpenSSL::Cipher::CipherError if body.nil?
+      raise DecodingError if body.nil?
       body.force_encoding('UTF-8')
       body
     end

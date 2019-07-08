@@ -51,14 +51,14 @@ module GLogin
       # Returns a hash with two elements: login and avatar.
       # If the secret is empty, the text will be returned, without
       # any decryption. If the data is not valid, an exception
-      # OpenSSL::Cipher::CipherError will be raised, which you have
+      # GLogin::Codec::DecodingError will be raised, which you have
       # to catch in your applicaiton and ignore the login attempt.
       def to_user
         plain = Codec.new(@secret).decrypt(@text)
         login, avatar, bearer, ctx = plain.split(GLogin::SPLIT, 4)
         if !@secret.empty? && ctx.to_s != @context
           raise(
-            OpenSSL::Cipher::CipherError,
+            GLogin::Codec::DecodingError,
             "Context '#{@context}' expected, but '#{ctx}' found"
           )
         end

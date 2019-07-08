@@ -87,7 +87,7 @@ class TestCookie < Minitest::Test
 
   def test_fails_on_wrong_context
     secret = 'fdjruewoijs789fdsufds89f7ds89fs'
-    assert_raises OpenSSL::Cipher::CipherError do
+    assert_raises GLogin::Codec::DecodingError do
       GLogin::Cookie::Closed.new(
         GLogin::Cookie::Open.new(
           JSON.parse('{"login":"x","avatar_url":"x"}'),
