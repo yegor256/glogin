@@ -30,7 +30,8 @@ class TestCookie < Minitest::Test
     user = GLogin::Cookie::Closed.new(
       GLogin::Cookie::Open.new(
         JSON.parse(
-          "{\"login\":\"yegor256\",\
+          "{\"id\":\"123\",
+          \"login\":\"yegor256\",
           \"avatar_url\":\"https://avatars1.githubusercontent.com/u/526301\"}"
         ),
         secret
@@ -46,30 +47,33 @@ class TestCookie < Minitest::Test
     context = '127.0.0.1'
     user = GLogin::Cookie::Closed.new(
       GLogin::Cookie::Open.new(
-        JSON.parse('{"login":"jeffrey","avatar_url":"#"}'),
+        JSON.parse('{"id":"123","login":"jeffrey","avatar_url":"#"}'),
         secret,
         context
       ).to_s,
       secret,
       context
     ).to_user
+    assert_equal(user[:id], '123')
     assert_equal(user[:login], 'jeffrey')
     assert_equal(user[:avatar], '#')
   end
 
   def test_decrypts_in_test_mode
     user = GLogin::Cookie::Closed.new(
-      'test|http://example.com', ''
+      '123|test|http://example.com', ''
     ).to_user
+    assert_equal(user[:id], '123')
     assert_equal(user[:login], 'test')
     assert_equal(user[:avatar], 'http://example.com')
   end
 
   def test_decrypts_in_test_mode_with_context
     user = GLogin::Cookie::Closed.new(
-      'tester', '', 'some context'
+      '123', '', 'some context'
     ).to_user
-    assert_equal('tester', user[:login])
+    assert_equal('123', user[:id])
+    assert_nil(user[:login])
     assert_nil(user[:avatar])
   end
 

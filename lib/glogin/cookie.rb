@@ -55,14 +55,14 @@ module GLogin
       # to catch in your applicaiton and ignore the login attempt.
       def to_user
         plain = Codec.new(@secret).decrypt(@text)
-        login, avatar, bearer, ctx = plain.split(GLogin::SPLIT, 4)
+        id, login, avatar, bearer, ctx = plain.split(GLogin::SPLIT, 5)
         if !@secret.empty? && ctx.to_s != @context
           raise(
             GLogin::Codec::DecodingError,
             "Context '#{@context}' expected, but '#{ctx}' found"
           )
         end
-        { login: login, avatar: avatar, bearer: bearer }
+        { id: id, login: login, avatar: avatar, bearer: bearer }
       end
     end
 
@@ -75,6 +75,11 @@ module GLogin
         raise 'Secret can\'t be nil' if secret.nil?
         @secret = secret
         @context = context.to_s
+      end
+
+      # GitHub id of the authenticated user
+      def id
+        @json['id']
       end
 
       # GitHub login name of the authenticated user
@@ -91,6 +96,7 @@ module GLogin
       def to_s
         Codec.new(@secret).encrypt(
           [
+            id,
             login,
             avatar_url,
             @json['bearer'],
