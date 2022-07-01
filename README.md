@@ -69,6 +69,8 @@ a local variable `@user` will be set to something like this:
 { login: 'yegor256', avatar: 'http://...' }
 ```
 
+If the `secret` is an empty string, the encryption will be disabled.
+
 Next, we need a URL for GitHub OAuth callback:
 
 ```ruby
