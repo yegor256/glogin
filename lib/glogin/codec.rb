@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 #
-# Copyright (c) 2017-2020 Yegor Bugayenko
+# Copyright (c) 2017-2022 Yegor Bugayenko
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the 'Software'), to deal
@@ -28,7 +28,7 @@ require 'base58'
 
 # Codec.
 # Author:: Yegor Bugayenko (yegor256@gmail.com)
-# Copyright:: Copyright (c) 2017-2020 Yegor Bugayenko
+# Copyright:: Copyright (c) 2017-2022 Yegor Bugayenko
 # License:: MIT
 class GLogin::Codec
   # When can't decode.
@@ -71,7 +71,7 @@ class GLogin::Codec
       cpr.encrypt
       cpr.key = digest
       salt = SecureRandom.base64(Random.rand(8..32))
-      encrypted = cpr.update(salt + ' ' + text)
+      encrypted = cpr.update("#{salt} #{text}")
       encrypted << cpr.final
       Base58.binary_to_base58(encrypted)
     end

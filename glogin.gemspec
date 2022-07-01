@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-#
-# Copyright (c) 2017-2020 Yegor Bugayenko
+# Copyright (c) 2017-2022 Yegor Bugayenko
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the 'Software'), to deal
@@ -28,11 +27,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require_relative 'lib/glogin/version'
 
 Gem::Specification.new do |s|
-  s.specification_version = 2 if s.respond_to? :specification_version=
-  if s.respond_to? :required_rubygems_version=
-    s.required_rubygems_version = Gem::Requirement.new('>= 0')
-  end
-  s.rubygems_version = '2.2'
+  s.required_rubygems_version = Gem::Requirement.new('>= 0') if s.respond_to? :required_rubygems_version=
   s.required_ruby_version = '~>2.3'
   s.name = 'glogin'
   s.version = GLogin::VERSION
@@ -44,16 +39,16 @@ Gem::Specification.new do |s|
   s.homepage = 'http://github.com/yegor256/glogin'
   s.files = `git ls-files`.split($RS)
   s.executables = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
-  s.test_files = s.files.grep(%r{^(test)/})
   s.rdoc_options = ['--charset=UTF-8']
   s.extra_rdoc_files = ['README.md', 'LICENSE.txt']
   s.add_runtime_dependency 'base58', '0.2.3'
-  s.add_development_dependency 'codecov', '0.1.14'
-  s.add_development_dependency 'minitest', '5.11.3'
-  s.add_development_dependency 'rake', '12.3.2'
-  s.add_development_dependency 'rdoc', '4.3.0'
-  s.add_development_dependency 'rspec-rails', '3.8.2'
-  s.add_development_dependency 'rubocop', '0.65.0'
-  s.add_development_dependency 'rubocop-rspec', '1.32.0'
-  s.add_development_dependency 'webmock', '3.5.1'
+  s.add_development_dependency 'codecov', '0.6.0'
+  s.add_development_dependency 'minitest', '5.16.1'
+  s.add_development_dependency 'rake', '13.0.6'
+  s.add_development_dependency 'rdoc', '6.4.0'
+  s.add_development_dependency 'rspec-rails', '5.1.2'
+  s.add_development_dependency 'rubocop', '1.31.1'
+  s.add_development_dependency 'rubocop-rspec', '2.11.1'
+  s.add_development_dependency 'webmock', '3.14.0'
+  s.metadata['rubygems_mfa_required'] = 'true'
 end

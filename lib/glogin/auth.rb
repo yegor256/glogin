@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 #
-# Copyright (c) 2017-2020 Yegor Bugayenko
+# Copyright (c) 2017-2022 Yegor Bugayenko
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the 'Software'), to deal
@@ -28,7 +28,7 @@ require 'cgi'
 
 # GLogin main module.
 # Author:: Yegor Bugayenko (yegor256@gmail.com)
-# Copyright:: Copyright (c) 2017-2020 Yegor Bugayenko
+# Copyright:: Copyright (c) 2017-2022 Yegor Bugayenko
 # License:: MIT
 module GLogin
   #
@@ -45,10 +45,7 @@ module GLogin
     end
 
     def login_uri
-      'https://github.com/login/oauth/authorize?client_id=' +
-        CGI.escape(@id) +
-        '&redirect_uri=' +
-        CGI.escape(@redirect)
+      "https://github.com/login/oauth/authorize?client_id=#{CGI.escape(@id)}&redirect_uri=#{CGI.escape(@redirect)}"
     end
 
     def user(code)
