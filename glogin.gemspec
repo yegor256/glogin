@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Copyright (c) 2017-2022 Yegor Bugayenko
+# Copyright (c) 2017-2023 Yegor Bugayenko
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the 'Software'), to deal
@@ -42,13 +42,13 @@ Gem::Specification.new do |s|
   s.rdoc_options = ['--charset=UTF-8']
   s.extra_rdoc_files = ['README.md', 'LICENSE.txt']
   s.add_runtime_dependency 'base58', '0.2.3'
-  s.add_development_dependency 'codecov', '0.6.0'
   s.add_development_dependency 'minitest', '5.16.1'
   s.add_development_dependency 'rake', '13.0.6'
   s.add_development_dependency 'rdoc', '6.4.0'
   s.add_development_dependency 'rspec-rails', '5.1.2'
   s.add_development_dependency 'rubocop', '1.31.1'
   s.add_development_dependency 'rubocop-rspec', '2.11.1'
+  s.add_development_dependency 'simplecov', '0.22.0'
   s.add_development_dependency 'webmock', '3.14.0'
   s.metadata['rubygems_mfa_required'] = 'true'
 end
