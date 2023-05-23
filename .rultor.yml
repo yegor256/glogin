@@ -6,6 +6,7 @@ install: |
   pdd -f /dev/null
   sudo bundle install --no-color "--gemfile=$(pwd)/Gemfile"
 release:
+  pre: false
   script: |-
     [[ "${tag}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || exit -1
     bundle exec rake
