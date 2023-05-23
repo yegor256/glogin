@@ -48,7 +48,7 @@ module GLogin
       else
         cpr = cipher
         cpr.decrypt
-        cpr.key = digest
+        cpr.key = digest(cpr.key_len)
         raise DecodingError unless /^[a-zA-Z0-9]+$/.match?(text)
         plain = Base58.base58_to_binary(text)
         raise DecodingError if plain.empty?
@@ -71,7 +71,7 @@ module GLogin
       else
         cpr = cipher
         cpr.encrypt
-        cpr.key = digest
+        cpr.key = digest(cpr.key_len)
         salt = SecureRandom.base64(Random.rand(8..32))
         encrypted = cpr.update("#{salt} #{text}")
         encrypted << cpr.final
@@ -79,8 +79,10 @@ module GLogin
       end
     end
 
-    def digest
-      Digest::SHA1.hexdigest(@secret)[0..31]
+    private
+
+    def digest(len)
+      Digest::SHA1.hexdigest(@secret)[0..len - 1]
     end
 
     def cipher
