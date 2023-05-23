@@ -60,6 +60,12 @@ class TestCodec < Minitest::Test
     end
   end
 
+  def test_decrypts_broken_text_with_empty_key
+    assert_raises GLogin::Codec::DecodingError do
+      GLogin::Codec.new('key').decrypt('')
+    end
+  end
+
   def test_encrypts_and_decrypts_with_empty_key
     crypt = GLogin::Codec.new
     text = 'This is the text, дорогой друг!'
