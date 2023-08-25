@@ -54,6 +54,13 @@ class TestCodec < Minitest::Test
     assert(!text.include?("\n"), text)
   end
 
+  def test_encrypts_using_base64
+    codec = GLogin::Codec.new('6hFGrte5LLmwi', base64: true)
+    text = 'Hello, world!'
+    enc = codec.encrypt(text)
+    assert_equal(text, codec.decrypt(enc))
+  end
+
   def test_decrypts_broken_text
     assert_raises GLogin::Codec::DecodingError do
       GLogin::Codec.new('the key').decrypt('этот текст не был зашифрован')
