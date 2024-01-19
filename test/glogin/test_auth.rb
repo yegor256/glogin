@@ -53,4 +53,9 @@ class TestAuth < Minitest::Test
       )
     )
   end
+
+  def test_get_fake_user
+    auth = GLogin::Auth.new('99999', '', 'http://www.example.com/github-oauth')
+    assert_equal('yegor256', auth.user('1234567890')['login'])
+  end
 end

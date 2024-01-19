@@ -48,7 +48,19 @@ module GLogin
       "https://github.com/login/oauth/authorize?client_id=#{CGI.escape(@id)}&redirect_uri=#{CGI.escape(@redirect)}"
     end
 
+    # Returns a hash with information about Github user,
+    # who just logged in with the authentication code.
+    #
+    # API: https://docs.github.com/en/rest/users/users?apiVersion=2022-11-28#get-the-authenticated-user
     def user(code)
+      if @secret.empty?
+        return {
+          'id' => 526_301,
+          'type' => 'User',
+          'login' => 'yegor256',
+          'avatar_url' => 'https://github.com/yegor256.png'
+        }
+      end
       raise 'Code can\'t be nil' if code.nil?
       uri = URI.parse('https://api.github.com/user')
       http = Net::HTTP.new(uri.host, uri.port)
