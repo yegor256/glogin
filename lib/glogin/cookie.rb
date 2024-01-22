@@ -39,19 +39,29 @@ module GLogin
   #
   class Cookie
     # Closed cookie.
+    #
+    # An instance of this class is created when a cookie arrives
+    # to the application. The cookie text is provided to the class
+    # as the first parameter. Then, when an instance of the class
+    # is created, the value encypted inside the cookie text may
+    # be retrieved through the +to_user+ method.
     class Closed
       def initialize(text, secret, context = '')
         raise 'Text can\'t be nil' if text.nil?
         @text = text
         raise 'Secret can\'t be nil' if secret.nil?
         @secret = secret
+        raise 'Context can\'t be nil' if context.nil?
         @context = context.to_s
       end
 
-      # Returns a hash with two elements: login and avatar.
-      # If the secret is empty, the text will be returned, without
-      # any decryption. If the data is not valid, an exception
-      # GLogin::Codec::DecodingError will be raised, which you have
+      # Returns a hash with four elements: `id`, `login`, `avatar`, and `bearer`.
+      #
+      # If the `secret` is empty, the text will not be decrypted, but used
+      # "as is". This may be helpful during testing.
+      #
+      # If the data is not valid, an exception
+      # `GLogin::Codec::DecodingError` will be raised, which you have
       # to catch in your applicaiton and ignore the login attempt.
       def to_user
         plain = Codec.new(@secret).decrypt(@text)
@@ -68,12 +78,24 @@ module GLogin
 
     # Open
     class Open
-      # Here comes the JSON you receive from Auth.user()
+      # Here comes the JSON you receive from Auth.user().
+      #
+      # The JSON is a Hash where every key is a string. When the class is instantiated,
+      # its methods +id+, +login+, and +avatar_url+ may be used to retrieve
+      # the data inside the JSON, but this is not what this class is mainly about.
+      #
+      # The method +to_s+ returns an encrypted cookie string, that may be
+      # sent to the user as a +Set-Cookie+ HTTP header.
       def initialize(json, secret, context = '')
         raise 'JSON can\'t be nil' if json.nil?
+        raise 'JSON must contain "id" key' if json['id'].nil?
+        raise 'JSON must contain "login" key' if json['login'].nil?
+        raise 'JSON must contain "avatar_url" key' if json['avatar_url'].nil?
+        raise 'JSON must contain "bearer" key' if json['bearer'].nil?
         @json = json
         raise 'Secret can\'t be nil' if secret.nil?
         @secret = secret
+        raise 'Context can\'t be nil' if context.nil?
         @context = context.to_s
       end
 

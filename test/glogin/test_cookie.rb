@@ -31,7 +31,7 @@ class TestCookie < Minitest::Test
       GLogin::Cookie::Open.new(
         JSON.parse(
           "{\"id\":\"123\",
-          \"login\":\"yegor256\",
+          \"login\":\"yegor256\",\"bearer\":\"\",
           \"avatar_url\":\"https://avatars1.githubusercontent.com/u/526301\"}"
         ),
         secret
@@ -47,7 +47,7 @@ class TestCookie < Minitest::Test
     context = '127.0.0.1'
     user = GLogin::Cookie::Closed.new(
       GLogin::Cookie::Open.new(
-        JSON.parse('{"id":"123","login":"jeffrey","avatar_url":"#"}'),
+        JSON.parse('{"id":"123","login":"jeffrey","avatar_url":"#","bearer":""}'),
         secret,
         context
       ).to_s,
@@ -81,7 +81,7 @@ class TestCookie < Minitest::Test
     assert_raises GLogin::Codec::DecodingError do
       GLogin::Cookie::Closed.new(
         GLogin::Cookie::Open.new(
-          JSON.parse('{"login":"x","avatar_url":"x"}'),
+          JSON.parse('{"login":"x","avatar_url":"x","id":"1","bearer":""}'),
           'secret-1'
         ).to_s,
         'secret-2'
@@ -94,7 +94,7 @@ class TestCookie < Minitest::Test
     assert_raises GLogin::Codec::DecodingError do
       GLogin::Cookie::Closed.new(
         GLogin::Cookie::Open.new(
-          JSON.parse('{"login":"x","avatar_url":"x"}'),
+          JSON.parse('{"login":"x","avatar_url":"x","id":"999","bearer":""}'),
           secret,
           'context-1'
         ).to_s,

@@ -56,9 +56,9 @@ module GLogin
       if @secret.empty?
         return {
           'id' => 526_301,
-          'type' => 'User',
           'login' => 'yegor256',
-          'avatar_url' => 'https://github.com/yegor256.png'
+          'avatar_url' => 'https://github.com/yegor256.png',
+          'bearer' => ''
         }
       end
       raise 'Code can\'t be nil' if code.nil?
