@@ -78,10 +78,12 @@ module GLogin
 
     # Open
     class Open
+      attr_reader :id, :login, :avatar_url, :bearer
+
       # Here comes the JSON you receive from Auth.user().
       #
       # The JSON is a Hash where every key is a string. When the class is instantiated,
-      # its methods +id+, +login+, and +avatar_url+ may be used to retrieve
+      # its methods `id`, `login`, and `avatar_url` may be used to retrieve
       # the data inside the JSON, but this is not what this class is mainly about.
       #
       # The method +to_s+ returns an encrypted cookie string, that may be
@@ -89,39 +91,24 @@ module GLogin
       def initialize(json, secret, context = '')
         raise 'JSON can\'t be nil' if json.nil?
         raise 'JSON must contain "id" key' if json['id'].nil?
-        raise 'JSON must contain "login" key' if json['login'].nil?
-        raise 'JSON must contain "avatar_url" key' if json['avatar_url'].nil?
-        raise 'JSON must contain "bearer" key' if json['bearer'].nil?
-        @json = json
+        @id = json['id']
+        @login = json['login'] || ''
+        @avatar_url = json['avatar_url'] || ''
+        @bearer = json['bearer'] || ''
         raise 'Secret can\'t be nil' if secret.nil?
         @secret = secret
         raise 'Context can\'t be nil' if context.nil?
         @context = context.to_s
       end
 
-      # GitHub id of the authenticated user
-      def id
-        @json['id']
-      end
-
-      # GitHub login name of the authenticated user
-      def login
-        @json['login']
-      end
-
-      # GitHub avatar URL of the authenticated user
-      def avatar_url
-        @json['avatar_url']
-      end
-
       # Returns the text you should drop back to the user as a cookie.
       def to_s
         Codec.new(@secret).encrypt(
           [
-            id,
-            login,
-            avatar_url,
-            @json['bearer'],
+            @id,
+            @login,
+            @avatar_url,
+            @bearer,
             @context
           ].join(GLogin::SPLIT)
         )

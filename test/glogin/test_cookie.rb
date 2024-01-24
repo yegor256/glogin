@@ -94,7 +94,7 @@ class TestCookie < Minitest::Test
     assert_raises GLogin::Codec::DecodingError do
       GLogin::Cookie::Closed.new(
         GLogin::Cookie::Open.new(
-          JSON.parse('{"login":"x","avatar_url":"x","id":"999","bearer":""}'),
+          JSON.parse('{"login":"x","avatar_url":"x","id":"","bearer":""}'),
           secret,
           'context-1'
         ).to_s,
