@@ -57,8 +57,7 @@ module GLogin
         return {
           'id' => 526_301,
           'login' => 'yegor256',
-          'avatar_url' => 'https://github.com/yegor256.png',
-          'bearer' => ''
+          'avatar_url' => 'https://github.com/yegor256.png'
         }
       end
       raise 'Code can\'t be nil' if code.nil?

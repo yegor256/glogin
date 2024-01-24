@@ -55,7 +55,7 @@ module GLogin
         @context = context.to_s
       end
 
-      # Returns a hash with four elements: `id`, `login`, `avatar`, and `bearer`.
+      # Returns a hash with four elements: `id`, `login`, and `avatar_url`.
       #
       # If the `secret` is empty, the text will not be decrypted, but used
       # "as is". This may be helpful during testing.
@@ -65,20 +65,20 @@ module GLogin
       # to catch in your applicaiton and ignore the login attempt.
       def to_user
         plain = Codec.new(@secret).decrypt(@text)
-        id, login, avatar, bearer, ctx = plain.split(GLogin::SPLIT, 5)
+        id, login, avatar_url, ctx = plain.split(GLogin::SPLIT, 5)
         if !@secret.empty? && ctx.to_s != @context
           raise(
             GLogin::Codec::DecodingError,
             "Context '#{@context}' expected, but '#{ctx}' found"
           )
         end
-        { id: id, login: login, avatar: avatar, bearer: bearer }
+        { id: id, login: login, avatar_url: avatar_url }
       end
     end
 
     # Open
     class Open
-      attr_reader :id, :login, :avatar_url, :bearer
+      attr_reader :id, :login, :avatar_url
 
       # Here comes the JSON you receive from Auth.user().
       #
@@ -108,7 +108,6 @@ module GLogin
             @id,
             @login,
             @avatar_url,
-            @bearer,
             @context
           ].join(GLogin::SPLIT)
         )

@@ -31,7 +31,7 @@ class TestCookie < Minitest::Test
       GLogin::Cookie::Open.new(
         JSON.parse(
           "{\"id\":\"123\",
-          \"login\":\"yegor256\",\"bearer\":\"\",
+          \"login\":\"yegor256\",
           \"avatar_url\":\"https://avatars1.githubusercontent.com/u/526301\"}"
         ),
         secret
@@ -39,7 +39,7 @@ class TestCookie < Minitest::Test
       secret
     ).to_user
     assert_equal(user[:login], 'yegor256')
-    assert_equal(user[:avatar], 'https://avatars1.githubusercontent.com/u/526301')
+    assert_equal(user[:avatar_url], 'https://avatars1.githubusercontent.com/u/526301')
   end
 
   def test_encrypts_and_decrypts_with_context
@@ -47,7 +47,7 @@ class TestCookie < Minitest::Test
     context = '127.0.0.1'
     user = GLogin::Cookie::Closed.new(
       GLogin::Cookie::Open.new(
-        JSON.parse('{"id":"123","login":"jeffrey","avatar_url":"#","bearer":""}'),
+        JSON.parse('{"id":"123","login":"jeffrey","avatar_url":"#"}'),
         secret,
         context
       ).to_s,
@@ -56,7 +56,7 @@ class TestCookie < Minitest::Test
     ).to_user
     assert_equal(user[:id], '123')
     assert_equal(user[:login], 'jeffrey')
-    assert_equal(user[:avatar], '#')
+    assert_equal(user[:avatar_url], '#')
   end
 
   def test_decrypts_in_test_mode
@@ -65,7 +65,7 @@ class TestCookie < Minitest::Test
     ).to_user
     assert_equal(user[:id], '123')
     assert_equal(user[:login], 'test')
-    assert_equal(user[:avatar], 'http://example.com')
+    assert_equal(user[:avatar_url], 'http://example.com')
   end
 
   def test_decrypts_in_test_mode_with_context
@@ -74,14 +74,14 @@ class TestCookie < Minitest::Test
     ).to_user
     assert_equal('123', user[:id])
     assert_nil(user[:login])
-    assert_nil(user[:avatar])
+    assert_nil(user[:avatar_url])
   end
 
   def test_fails_on_broken_text
     assert_raises GLogin::Codec::DecodingError do
       GLogin::Cookie::Closed.new(
         GLogin::Cookie::Open.new(
-          JSON.parse('{"login":"x","avatar_url":"x","id":"1","bearer":""}'),
+          JSON.parse('{"login":"x","avatar_url":"x","id":"1"}'),
           'secret-1'
         ).to_s,
         'secret-2'
@@ -94,7 +94,7 @@ class TestCookie < Minitest::Test
     assert_raises GLogin::Codec::DecodingError do
       GLogin::Cookie::Closed.new(
         GLogin::Cookie::Open.new(
-          JSON.parse('{"login":"x","avatar_url":"x","id":"","bearer":""}'),
+          JSON.parse('{"login":"x","avatar_url":"x","id":""}'),
           secret,
           'context-1'
         ).to_s,
