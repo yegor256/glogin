@@ -26,7 +26,7 @@ gemspec
 
 gem 'minitest', '5.21.2', require: false
 gem 'rake', '13.1.0', require: false
-gem 'rdoc', '6.6.1', require: false
+gem 'rdoc', '6.6.2', require: false
 gem 'rspec-rails', '6.1.1', require: false
 gem 'rubocop', '1.60.2', require: false
 gem 'rubocop-rspec', '2.26.1', require: false
