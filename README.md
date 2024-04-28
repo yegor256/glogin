@@ -9,7 +9,6 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/155f86b639d155259219/maintainability)](https://codeclimate.com/github/yegor256/glogin/maintainability)
 [![Test Coverage](https://img.shields.io/codecov/c/github/yegor256/glogin.svg)](https://codecov.io/github/yegor256/glogin?branch=master)
 [![Yard Docs](http://img.shields.io/badge/yard-docs-blue.svg)](http://rubydoc.info/github/yegor256/glogin/master/frames)
-![Lines of code](https://img.shields.io/tokei/lines/github/yegor256/glogin)
 [![Hits-of-Code](https://hitsofcode.com/github/yegor256/glogin)](https://hitsofcode.com/view/github/yegor256/glogin)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/yegor256/glogin/blob/master/LICENSE.txt)
 
