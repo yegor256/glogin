@@ -102,7 +102,7 @@ module GLogin
       [
         '"',
         txt[0..prefix],
-        '*' * (token.length - prefix),
+        '*' * (txt.length - prefix),
         '"'
       ].join
     end

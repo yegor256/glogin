@@ -58,4 +58,11 @@ class TestAuth < Minitest::Test
     auth = GLogin::Auth.new('99999', '', 'http://www.example.com/github-oauth')
     assert_equal('yegor256', auth.user('1234567890')['login'])
   end
+
+  def test_failed_authentication
+    auth = GLogin::Auth.new('1234', '4433', 'https://example.org')
+    stub_request(:post, 'https://github.com/login/oauth/access_token').to_return(status: 401)
+    e = assert_raises { auth.user('437849732894732') }
+    assert(e.message.include?('with code "43784***'))
+  end
 end
