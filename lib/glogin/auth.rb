@@ -67,9 +67,12 @@ module GLogin
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       req = Net::HTTP::Get.new(uri.request_uri)
       req['Accept-Header'] = 'application/json'
-      req['Authorization'] = "token #{access_token(code)}"
+      token = access_token(code)
+      req['Authorization'] = "token #{token}"
       res = http.request(req)
-      raise "Error (#{res.code}): #{res.body}" unless res.code == '200'
+      unless res.code == '200'
+        raise "Error (#{res.code}) with token #{token[0..6]}#{'*' * (token.length - 6)}: #{res.body}"
+      end
       JSON.parse(res.body)
     end
 
