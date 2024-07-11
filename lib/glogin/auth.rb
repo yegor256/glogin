@@ -70,7 +70,7 @@ module GLogin
       token = access_token(code)
       req['Authorization'] = "token #{token}"
       res = http.request(req)
-      raise "Error (#{res.code}) with token #{escape(token)}: #{res.body}" unless res.code == '200'
+      raise "HTTP error ##{res.code} with token #{escape(token)}: #{res.body}" unless res.code == '200'
       JSON.parse(res.body)
     end
 
@@ -90,7 +90,7 @@ module GLogin
       )
       req['Accept'] = 'application/json'
       res = http.request(req)
-      raise "Error (#{res.code}) with code #{escape(code)}: #{res.body}" unless res.code == '200'
+      raise "HTTP error ##{res.code} with code #{escape(code)}: #{res.body}" unless res.code == '200'
       JSON.parse(res.body)['access_token']
     end
 
