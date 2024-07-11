@@ -109,7 +109,7 @@ and the encryption will be disabled:
 whatever will be coming from the cookie will be trusted. For testing
 it will be convenient to provide a user name in a query string, like:
 
-```
+```text
 http://localhost:9292/?glogin=tester
 ```
 
