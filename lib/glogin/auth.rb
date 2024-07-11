@@ -94,7 +94,10 @@ module GLogin
       req['Accept'] = 'application/json'
       res = http.request(req)
       raise "HTTP error ##{res.code} with code #{escape(code)}: #{res.body}" unless res.code == '200'
-      JSON.parse(res.body)['access_token']
+      json = JSON.parse(res.body)
+      token = json['access_token']
+      raise "There is no 'access_token' in JSON response from GitHub: #{res.body}" if token.nil?
+      token
     end
 
     def escape(txt)
