@@ -1,4 +1,4 @@
-<img src="/logo.svg" width="64px" height="64px"/>
+# OAuth Login via GitHub Made Simple
 
 [![DevOps By Rultor.com](http://www.rultor.com/b/yegor256/glogin)](http://www.rultor.com/p/yegor256/glogin)
 [![We recommend RubyMine](https://www.elegantobjects.org/rubymine.svg)](https://www.jetbrains.com/ruby/)
@@ -13,13 +13,13 @@
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/yegor256/glogin/blob/master/LICENSE.txt)
 
 This simple gem will help you enable login/logout through
-[GitHub OAuth](https://developer.github.com/apps/building-integrations/setting-up-and-registering-oauth-apps/)
+[GitHub OAuth][doc]
 for your web application. This is how it works with
 [Sinatra](http://www.sinatrarb.com/),
 but you can do something similar in any framework.
 
 Read this blog post to get the idea:
-[_Simplified GitHub Login for a Ruby Web App_](https://www.yegor256.com/2018/06/19/glogin.html)
+[_Simplified GitHub Login for a Ruby Web App_][blog]
 
 First, somewhere in the global space, before the app starts:
 
@@ -104,7 +104,8 @@ settings.glogin.login_uri
 ```
 
 For unit testing you can just provide an empty string as a `secret` for
-`GLogin::Cookie::Open` and `GLogin::Cookie::Closed` and the encryption will be disabled:
+`GLogin::Cookie::Open` and `GLogin::Cookie::Closed`
+and the encryption will be disabled:
 whatever will be coming from the cookie will be trusted. For testing
 it will be convenient to provide a user name in a query string, like:
 
@@ -140,14 +141,19 @@ decrypted = codec.decrypt(encrypted)
 
 ## How to contribute
 
-Read [these guidelines](https://www.yegor256.com/2014/04/15/github-guidelines.html).
+Read
+[these guidelines](https://www.yegor256.com/2014/04/15/github-guidelines.html).
 Make sure you build is green before you contribute
-your pull request. You will need to have [Ruby](https://www.ruby-lang.org/en/) 2.3+ and
+your pull request. You will need to have
+[Ruby](https://www.ruby-lang.org/en/) 2.3+ and
 [Bundler](https://bundler.io/) installed. Then:
 
-```
-$ bundle update
-$ bundle exec rake
+```bash
+bundle update
+bundle exec rake
 ```
 
 If it's clean and you don't see any error messages, submit your pull request.
+
+[blog]: https://www.yegor256.com/2018/06/19/glogin.html
+[doc]: https://developer.github.com/apps/building-integrations/setting-up-and-registering-oauth-apps/
