@@ -41,7 +41,7 @@ Gem::Specification.new do |s|
   s.executables = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
   s.rdoc_options = ['--charset=UTF-8']
   s.extra_rdoc_files = ['README.md', 'LICENSE.txt']
-  s.add_runtime_dependency 'base58', '>= 0.2'
-  s.add_runtime_dependency 'openssl', '>= 2.0'
+  s.add_dependency 'base58', '>= 0.2'
+  s.add_dependency 'openssl', '>= 2.0'
   s.metadata['rubygems_mfa_required'] = 'true'
 end
