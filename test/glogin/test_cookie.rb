@@ -30,7 +30,7 @@ class TestCookie < Minitest::Test
     user = GLogin::Cookie::Closed.new(
       GLogin::Cookie::Open.new(
         JSON.parse(
-          "{\"id\":123,
+          "{\"id\":123,\"node_id\":\"how are you?\",
           \"login\":\"yegor256\",
           \"avatar_url\":\"https://avatars1.githubusercontent.com/u/526301\"}"
         ),
