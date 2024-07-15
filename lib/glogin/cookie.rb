@@ -91,15 +91,10 @@ module GLogin
       def initialize(json, secret, context = '')
         raise 'JSON can\'t be nil' if json.nil?
         raise 'JSON must contain "id" key' if json['id'].nil?
-        json.each do |k, v|
-          raise "The key #{k} is not a string" unless k.is_a?(String)
-          raise "The key #{k} is not allowed" unless %w[id login avatar_url bearer].include?(k)
-          raise "The value '#{v}' of #{k} is not String or Integer" unless v.is_a?(String) || v.is_a?(Integer)
-        end
-        @id = json['id']
-        @login = json['login'] || ''
-        @avatar_url = json['avatar_url'] || ''
-        @bearer = json['bearer'] || ''
+        @id = json['id'].to_s
+        @login = (json['login'] || '').to_s
+        @avatar_url = (json['avatar_url'] || '').to_s
+        @bearer = (json['bearer'] || '').to_s
         raise 'Secret can\'t be nil' if secret.nil?
         @secret = secret
         raise 'Context can\'t be nil' if context.nil?
