@@ -92,9 +92,9 @@ module GLogin
         raise 'JSON can\'t be nil' if json.nil?
         raise 'JSON must contain "id" key' if json['id'].nil?
         json.each do |k, v|
-          raise "Key #{k} is not a string" unless k.is_a?(String)
-          raise "Key #{k} is not allowed" unless %w[id login avatar_url bearer].include?(k)
-          raise "Value #{v} is not a string" unless v.is_a?(String)
+          raise "The key #{k} is not a string" unless k.is_a?(String)
+          raise "The key #{k} is not allowed" unless %w[id login avatar_url bearer].include?(k)
+          raise "The value '#{v}' of #{k} is not String or Integer" unless v.is_a?(String) || v.is_a?(Integer)
         end
         @id = json['id']
         @login = json['login'] || ''
