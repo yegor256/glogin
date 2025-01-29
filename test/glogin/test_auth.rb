@@ -62,21 +62,21 @@ class TestAuth < Minitest::Test
   def test_failed_authentication
     auth = GLogin::Auth.new('1234', '4433', 'https://example.org')
     stub_request(:post, 'https://github.com/login/oauth/access_token').to_return(status: 401)
-    e = assert_raises { auth.user('437849732894732') }
-    assert(e.message.include?('with code "43784***'))
+    e = assert_raises(StandardError) { auth.user('437849732894732') }
+    assert_includes(e.message, 'with code "43784***')
   end
 
   def test_broken_json
     auth = GLogin::Auth.new('1234', '4433', 'https://example.org')
     stub_request(:post, 'https://github.com/login/oauth/access_token').to_return(body: 'Hello!')
-    e = assert_raises { auth.user('47839893') }
-    assert(e.message.include?('unexpected token'), e)
+    e = assert_raises(StandardError) { auth.user('47839893') }
+    assert_includes(e.message, 'unexpected token', e)
   end
 
   def test_no_token_in_json
     auth = GLogin::Auth.new('1234', '4433', 'https://example.org')
     stub_request(:post, 'https://github.com/login/oauth/access_token').to_return(body: '{}')
-    e = assert_raises { auth.user('47839893') }
-    assert(e.message.include?('There is no \'access_token\''), e)
+    e = assert_raises(StandardError) { auth.user('47839893') }
+    assert_includes(e.message, 'There is no \'access_token\'', e)
   end
 end

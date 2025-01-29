@@ -29,6 +29,8 @@ gem 'rake', '13.2.1', require: false
 gem 'rdoc', '6.11.0', require: false
 gem 'rspec-rails', '7.1.0', require: false
 gem 'rubocop', '1.65.1', require: false
+gem 'rubocop-minitest', '0.36.0', require: false
+gem 'rubocop-performance', '1.23.1', require: false
 gem 'rubocop-rspec', '3.4.0', require: false
 gem 'simplecov', '0.22.0', require: false
 gem 'webmock', '3.24.0', require: false

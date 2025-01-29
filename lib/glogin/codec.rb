@@ -84,7 +84,7 @@ module GLogin
         salt = SecureRandom.base64(Random.rand(8..32))
         encrypted = cpr.update("#{salt} #{text}")
         encrypted << cpr.final
-        @base64 ? Base64.encode64(encrypted).gsub("\n", '') : Base58.binary_to_base58(encrypted)
+        @base64 ? Base64.encode64(encrypted).delete("\n") : Base58.binary_to_base58(encrypted)
       end
     end
 

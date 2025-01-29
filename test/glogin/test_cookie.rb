@@ -38,8 +38,8 @@ class TestCookie < Minitest::Test
       ).to_s,
       secret
     ).to_user
-    assert_equal(user['login'], 'yegor256')
-    assert_equal(user['avatar_url'], 'https://avatars1.githubusercontent.com/u/526301')
+    assert_equal('yegor256', user['login'])
+    assert_equal('https://avatars1.githubusercontent.com/u/526301', user['avatar_url'])
   end
 
   def test_encrypts_and_decrypts_with_context
@@ -54,18 +54,18 @@ class TestCookie < Minitest::Test
       secret,
       context
     ).to_user
-    assert_equal(user['id'], '123')
-    assert_equal(user['login'], 'jeffrey')
-    assert_equal(user['avatar_url'], '#')
+    assert_equal('123', user['id'])
+    assert_equal('jeffrey', user['login'])
+    assert_equal('#', user['avatar_url'])
   end
 
   def test_decrypts_in_test_mode
     user = GLogin::Cookie::Closed.new(
       '123|test|http://example.com', ''
     ).to_user
-    assert_equal(user['id'], '123')
-    assert_equal(user['login'], 'test')
-    assert_equal(user['avatar_url'], 'http://example.com')
+    assert_equal('123', user['id'])
+    assert_equal('test', user['login'])
+    assert_equal('http://example.com', user['avatar_url'])
   end
 
   def test_decrypts_in_test_mode_with_context
