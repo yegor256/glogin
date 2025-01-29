@@ -48,6 +48,14 @@ class TestCodec < Minitest::Test
     end
   end
 
+  def test_decrypts_broken_base58
+    %w[abc0 abcO abcl abcI].each do |t|
+      assert_raises GLogin::Codec::DecodingError do
+        GLogin::Codec.new('some-key').decrypt(t)
+      end
+    end
+  end
+
   def test_encrypts_into_plain_string
     text = GLogin::Codec.new('6hFGrte5LLmwi').encrypt("K&j\n\n\tuIpwp00{]=")
     assert(text =~ /^[a-zA-Z0-9]+$/, text)

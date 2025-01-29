@@ -55,9 +55,9 @@ module GLogin
         cpr.decrypt
         cpr.key = digest(cpr.key_len)
         if @base64
-          raise DecodingError, 'This is not Base64' unless %r{^[a-zA-Z0-9\\+/=]+$}.match?(text)
+          raise DecodingError, "This is not Base64: #{text.inspect}" unless %r{^[a-zA-Z0-9\\+/=]+$}.match?(text)
         else
-          raise DecodingError, 'This is not Base58' unless /^[a-zA-Z0-9]+$/.match?(text)
+          raise DecodingError, "This is not Base58: #{text.inspect}" unless /^[a-km-zA-HJ-NP-Z1-9]+$/.match?(text)
         end
         plain = @base64 ? Base64.decode64(text) : Base58.base58_to_binary(text)
         raise DecodingError if plain.empty?
