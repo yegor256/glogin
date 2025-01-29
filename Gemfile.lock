@@ -73,6 +73,8 @@ GEM
     minitest (5.25.2)
     nokogiri (1.18.2-arm64-darwin)
       racc (~> 1.4)
+    nokogiri (1.18.2-x86_64-linux-gnu)
+      racc (~> 1.4)
     openssl (3.3.0)
     parallel (1.26.3)
     parser (3.3.7.0)
@@ -180,6 +182,7 @@ GEM
 PLATFORMS
   arm64-darwin-22
   arm64-darwin-24
+  x86_64-linux
 
 DEPENDENCIES
   glogin!
