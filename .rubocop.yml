@@ -30,7 +30,6 @@ AllCops:
 require:
   - rubocop-minitest
   - rubocop-performance
-
 Minitest/EmptyLineBeforeAssertionMethods:
   Enabled: false
 Gemspec/RequiredRubyVersion:
