@@ -116,7 +116,7 @@ GEM
       zeitwerk (~> 2.6)
     rainbow (3.1.1)
     rake (13.2.1)
-    rdoc (6.11.0)
+    rdoc (6.12.0)
       psych (>= 4.0.0)
     regexp_parser (2.10.0)
     reline (0.6.0)
@@ -196,7 +196,7 @@ DEPENDENCIES
   glogin!
   minitest (= 5.25.2)
   rake (= 13.2.1)
-  rdoc (= 6.11.0)
+  rdoc (= 6.12.0)
   rspec-rails (= 7.1.0)
   rubocop (= 1.71.0)
   rubocop-minitest (> 0)
