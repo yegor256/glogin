@@ -71,7 +71,7 @@ GEM
     loofah (2.24.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
-    minitest (5.25.2)
+    minitest (5.25.4)
     nokogiri (1.18.3-arm64-darwin)
       racc (~> 1.4)
     nokogiri (1.18.3-x64-mingw-ucrt)
@@ -194,7 +194,7 @@ PLATFORMS
 
 DEPENDENCIES
   glogin!
-  minitest (= 5.25.2)
+  minitest (= 5.25.4)
   rake (= 13.2.1)
   rdoc (= 6.11.0)
   rspec-rails (= 7.1.0)
