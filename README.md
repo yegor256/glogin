@@ -1,14 +1,14 @@
 # OAuth Login via GitHub Made Simple
 
-[![DevOps By Rultor.com](http://www.rultor.com/b/yegor256/glogin)](http://www.rultor.com/p/yegor256/glogin)
+[![DevOps By Rultor.com](https://www.rultor.com/b/yegor256/glogin)](https://www.rultor.com/p/yegor256/glogin)
 [![We recommend RubyMine](https://www.elegantobjects.org/rubymine.svg)](https://www.jetbrains.com/ruby/)
 
 [![rake](https://github.com/yegor256/glogin/actions/workflows/rake.yml/badge.svg)](https://github.com/yegor256/glogin/actions/workflows/rake.yml)
-[![PDD status](http://www.0pdd.com/svg?name=yegor256/glogin)](http://www.0pdd.com/p?name=yegor256/glogin)
-[![Gem Version](https://badge.fury.io/rb/glogin.svg)](http://badge.fury.io/rb/glogin)
+[![PDD status](https://www.0pdd.com/svg?name=yegor256/glogin)](https://www.0pdd.com/p?name=yegor256/glogin)
+[![Gem Version](https://badge.fury.io/rb/glogin.svg)](https://badge.fury.io/rb/glogin)
 [![Maintainability](https://api.codeclimate.com/v1/badges/155f86b639d155259219/maintainability)](https://codeclimate.com/github/yegor256/glogin/maintainability)
 [![Test Coverage](https://img.shields.io/codecov/c/github/yegor256/glogin.svg)](https://codecov.io/github/yegor256/glogin?branch=master)
-[![Yard Docs](http://img.shields.io/badge/yard-docs-blue.svg)](http://rubydoc.info/github/yegor256/glogin/master/frames)
+[![Yard Docs](https://img.shields.io/badge/yard-docs-blue.svg)](https://rubydoc.info/github/yegor256/glogin/master/frames)
 [![Hits-of-Code](https://hitsofcode.com/github/yegor256/glogin)](https://hitsofcode.com/view/github/yegor256/glogin)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/yegor256/glogin/blob/master/LICENSE.txt)
 
