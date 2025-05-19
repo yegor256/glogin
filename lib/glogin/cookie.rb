@@ -26,7 +26,7 @@ module GLogin
     # An instance of this class is created when a cookie arrives
     # to the application. The cookie text is provided to the class
     # as the first parameter. Then, when an instance of the class
-    # is created, the value encypted inside the cookie text may
+    # is created, the value encrypted inside the cookie text may
     # be retrieved through the +to_user+ method.
     class Closed
       def initialize(text, secret, context = '')
@@ -45,7 +45,7 @@ module GLogin
       #
       # If the data is not valid, an exception
       # `GLogin::Codec::DecodingError` will be raised, which you have
-      # to catch in your applicaiton and ignore the login attempt.
+      # to catch in your application and ignore the login attempt.
       def to_user
         plain = Codec.new(@secret).decrypt(@text)
         id, login, avatar_url, ctx = plain.split(GLogin::SPLIT, 5)
