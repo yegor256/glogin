@@ -14,10 +14,39 @@ require 'cgi'
 # Copyright:: Copyright (c) 2017-2025 Yegor Bugayenko
 # License:: MIT
 module GLogin
+  # GitHub authentication mechanism.
   #
-  # GitHub auth mechanism
+  # This class handles the OAuth flow with GitHub, including generating
+  # authorization URLs and exchanging authorization codes for access tokens
+  # to retrieve user information.
   #
+  # @example Creating an Auth instance
+  #   auth = GLogin::Auth.new(
+  #     'your-github-client-id',
+  #     'your-github-client-secret',
+  #     'https://yourapp.com/callback'
+  #   )
+  #
+  # @example Getting the GitHub login URL
+  #   login_url = auth.login_uri
+  #   # => "https://github.com/login/oauth/authorize?client_id=...&redirect_uri=..."
+  #
+  # @example Retrieving user information after callback
+  #   user_info = auth.user(params[:code])
+  #   # => {"id"=>"123456", "login"=>"username", "avatar_url"=>"https://..."}
   class Auth
+    # Creates a new GitHub authentication handler.
+    #
+    # @param id [String] GitHub OAuth application client ID
+    # @param secret [String] GitHub OAuth application client secret
+    # @param redirect [String] The callback URL where GitHub will redirect after authentication
+    # @raise [RuntimeError] if any parameter is nil or redirect is empty
+    # @example
+    #   auth = GLogin::Auth.new(
+    #     ENV['GITHUB_CLIENT_ID'],
+    #     ENV['GITHUB_CLIENT_SECRET'],
+    #     'https://myapp.com/auth/callback'
+    #   )
     def initialize(id, secret, redirect)
       raise "GitHub client ID can't be nil" if id.nil?
       @id = id
@@ -28,14 +57,39 @@ module GLogin
       @redirect = redirect
     end
 
+    # Generates the GitHub OAuth authorization URL.
+    #
+    # Users should be redirected to this URL to begin the authentication process.
+    # GitHub will ask them to authorize your application, then redirect them back
+    # to your specified redirect URL with an authorization code.
+    #
+    # @return [String] The GitHub OAuth authorization URL
+    # @example Redirect users to GitHub for authentication
+    #   auth = GLogin::Auth.new(id, secret, redirect_url)
+    #   redirect auth.login_uri
     def login_uri
       "https://github.com/login/oauth/authorize?client_id=#{CGI.escape(@id)}&redirect_uri=#{CGI.escape(@redirect)}"
     end
 
-    # Returns a hash with information about Github user,
+    # Returns a hash with information about GitHub user
     # who just logged in with the authentication code.
     #
-    # API: https://docs.github.com/en/rest/users/users?apiVersion=2022-11-28#get-the-authenticated-user
+    # This method exchanges the temporary authorization code (received from GitHub
+    # callback) for an access token, then uses that token to fetch the user's
+    # profile information.
+    #
+    # @param code [String] The authorization code received from GitHub callback
+    # @return [Hash] User information including 'id', 'login', and 'avatar_url'
+    # @raise [RuntimeError] if the code is nil, empty, or if the API request fails
+    # @example Handling the GitHub callback
+    #   get '/auth/callback' do
+    #     code = params[:code]
+    #     user = auth.user(code)
+    #     # user => {"id"=>"123456", "login"=>"octocat", "avatar_url"=>"https://..."}
+    #     session[:user_id] = user['id']
+    #   end
+    # @note When secret is empty (test mode), returns a mock user object
+    # @see https://docs.github.com/en/rest/users/users?apiVersion=2022-11-28#get-the-authenticated-user
     def user(code)
       if @secret.empty?
         return {

@@ -15,20 +15,77 @@ require 'base64'
 # Copyright:: Copyright (c) 2017-2025 Yegor Bugayenko
 # License:: MIT
 module GLogin
-  # The codec
+  # The codec for encrypting and decrypting text.
+  #
+  # This class provides symmetric encryption using AES-256-CBC. It can encode
+  # text using either Base64 or Base58 encoding. A random salt is added to
+  # each encryption to ensure that the same plaintext produces different
+  # ciphertexts each time.
+  #
+  # @example Basic encryption and decryption
+  #   codec = GLogin::Codec.new('my-secret-key')
+  #   encrypted = codec.encrypt('sensitive data')
+  #   decrypted = codec.decrypt(encrypted)
+  #   # => "sensitive data"
+  #
+  # @example Using Base64 encoding
+  #   codec = GLogin::Codec.new('secret', base64: true)
+  #   encrypted = codec.encrypt('hello world')
+  #   # => "U29tZUJhc2U2NEVuY29kZWRTdHJpbmc="
+  #
+  # @example Test mode without encryption
+  #   codec = GLogin::Codec.new('')  # Empty secret
+  #   encrypted = codec.encrypt('plaintext')
+  #   # => "plaintext" (no encryption in test mode)
   class Codec
-    # When can't decode.
+    # Raised when decryption fails.
+    #
+    # This can happen when:
+    # - The encrypted text is corrupted
+    # - The wrong secret key is used
+    # - The text is not properly encoded (Base64/Base58)
     class DecodingError < StandardError; end
 
-    # Ctor.
-    # +secret+: The secret to do the encoding
-    # +base64+: If TRUE, Base-64 will be used, otherwise Base-58
+    # Creates a new codec instance.
+    #
+    # @param secret [String] The secret key for encryption. If empty, no encryption is performed (test mode)
+    # @param base64 [Boolean] Whether to use Base64 encoding (true) or Base58 encoding (false)
+    # @raise [RuntimeError] if secret is nil
+    # @example Create codec with Base58 encoding (default)
+    #   codec = GLogin::Codec.new('my-secret-key')
+    #
+    # @example Create codec with Base64 encoding
+    #   codec = GLogin::Codec.new('my-secret-key', base64: true)
+    #
+    # @example Create codec in test mode (no encryption)
+    #   codec = GLogin::Codec.new('')
     def initialize(secret = '', base64: false)
       raise 'Secret can\'t be nil' if secret.nil?
       @secret = secret
       @base64 = base64
     end
 
+    # Decrypts an encrypted text string.
+    #
+    # @param text [String] The encrypted text to decrypt
+    # @return [String] The decrypted plaintext
+    # @raise [RuntimeError] if text is nil
+    # @raise [DecodingError] if decryption fails due to:
+    #   - Invalid Base64/Base58 encoding
+    #   - Wrong secret key
+    #   - Corrupted ciphertext
+    #   - Missing or invalid salt
+    # @example Decrypt a Base58-encoded string
+    #   codec = GLogin::Codec.new('secret')
+    #   plaintext = codec.decrypt('3Hs9k2LgU...')
+    #   # => "hello world"
+    #
+    # @example Handle decryption errors
+    #   begin
+    #     plaintext = codec.decrypt(corrupted_text)
+    #   rescue GLogin::Codec::DecodingError => e
+    #     puts "Decryption failed: #{e.message}"
+    #   end
     def decrypt(text)
       raise 'Text can\'t be nil' if text.nil?
       if @secret.empty?
@@ -56,6 +113,30 @@ module GLogin
       raise DecodingError, e.message
     end
 
+    # Encrypts a plaintext string.
+    #
+    # The method adds a random salt to the text before encryption to ensure
+    # that encrypting the same text multiple times produces different results.
+    # The encrypted output is encoded using either Base64 or Base58.
+    #
+    # @param text [String] The plaintext to encrypt
+    # @return [String] The encrypted and encoded text
+    # @raise [RuntimeError] if text is nil
+    # @example Encrypt with Base58 encoding
+    #   codec = GLogin::Codec.new('secret')
+    #   encrypted = codec.encrypt('sensitive data')
+    #   # => "3Hs9k2LgU..." (Base58 encoded)
+    #
+    # @example Encrypt with Base64 encoding  
+    #   codec = GLogin::Codec.new('secret', base64: true)
+    #   encrypted = codec.encrypt('sensitive data')
+    #   # => "U29tZUJhc2U2NC..." (Base64 encoded)
+    #
+    # @example Multiple encryptions produce different results
+    #   codec = GLogin::Codec.new('secret')
+    #   enc1 = codec.encrypt('hello')
+    #   enc2 = codec.encrypt('hello')
+    #   enc1 != enc2  # => true (due to random salt)
     def encrypt(text)
       raise 'Text can\'t be nil' if text.nil?
       if @secret.empty?
