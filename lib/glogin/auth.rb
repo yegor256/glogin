@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 
-#
 # SPDX-FileCopyrightText: Copyright (c) 2017-2025 Yegor Bugayenko
 # SPDX-License-Identifier: MIT
 
+require 'cgi'
+require 'json'
 require 'net/http'
 require 'uri'
-require 'json'
-require 'cgi'
 
 # GLogin main module.
 # Author:: Yegor Bugayenko (yegor256@gmail.com)

@@ -1,12 +1,11 @@
 # frozen_string_literal: true
 
-#
 # SPDX-FileCopyrightText: Copyright (c) 2017-2025 Yegor Bugayenko
 # SPDX-License-Identifier: MIT
 
-require 'openssl'
-require 'digest/sha1'
 require 'base64'
+require 'digest/sha1'
+require 'openssl'
 require_relative 'codec'
 
 # GLogin main module.

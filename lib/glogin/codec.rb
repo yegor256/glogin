@@ -1,14 +1,13 @@
 # frozen_string_literal: true
 
-#
 # SPDX-FileCopyrightText: Copyright (c) 2017-2025 Yegor Bugayenko
 # SPDX-License-Identifier: MIT
 
-require 'securerandom'
-require 'openssl'
-require 'digest/sha1'
 require 'base58'
 require 'base64'
+require 'digest/sha1'
+require 'openssl'
+require 'securerandom'
 
 # Codec.
 # Author:: Yegor Bugayenko (yegor256@gmail.com)
