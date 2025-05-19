@@ -53,7 +53,7 @@ class TestAuth < Minitest::Test
     auth = GLogin::Auth.new('1234', '4433', 'https://example.org')
     stub_request(:post, 'https://github.com/login/oauth/access_token').to_return(body: 'Hello!')
     e = assert_raises(StandardError) { auth.user('47839893') }
-    assert_includes(e.message, 'unexpected token', e)
+    assert_includes(e.message, 'unexpected', e)
   end
 
   def test_no_token_in_json

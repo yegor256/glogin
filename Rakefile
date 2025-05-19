@@ -6,7 +6,6 @@
 
 require 'rubygems'
 require 'rake'
-require 'rdoc'
 require 'rake/clean'
 
 def name
@@ -17,7 +16,7 @@ def version
   Gem::Specification.load(Dir['*.gemspec'].first).version
 end
 
-task default: %i[clean test rubocop]
+task default: %i[clean test rubocop yard]
 
 require 'rake/testtask'
 desc 'Run all unit tests'
@@ -29,18 +28,14 @@ Rake::TestTask.new(:test) do |test|
   test.verbose = false
 end
 
-require 'rdoc/task'
-desc 'Build RDoc documentation'
-Rake::RDocTask.new do |rdoc|
-  rdoc.rdoc_dir = 'rdoc'
-  rdoc.title = "#{name} #{version}"
-  rdoc.rdoc_files.include('README*')
-  rdoc.rdoc_files.include('lib/**/*.rb')
+require 'yard'
+desc 'Build Yard documentation'
+YARD::Rake::YardocTask.new do |t|
+  t.files = ['lib/**/*.rb']
 end
 
 require 'rubocop/rake_task'
 desc 'Run RuboCop on all directories'
 RuboCop::RakeTask.new(:rubocop) do |task|
   task.fail_on_error = true
-  task.requires << 'rubocop-rspec'
 end
