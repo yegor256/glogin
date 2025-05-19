@@ -63,7 +63,7 @@ If the `glogin` cookie is coming in and contains a valid data,
 a local variable `@user` will be set to something like this:
 
 ```ruby
-{ login: 'yegor256', avatar: 'http://...' }
+{ 'id' => '526301', 'login' => 'yegor256', 'avatar' => 'http://...' }
 ```
 
 If the `secret` is an empty string, the encryption will be disabled.
