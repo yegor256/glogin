@@ -17,7 +17,7 @@ require_relative 'glogin/cookie'
 # @example Basic usage with Sinatra
 #   require 'sinatra'
 #   require 'glogin'
-#   
+#
 #   configure do
 #     set :glogin, GLogin::Auth.new(
 #       ENV['GITHUB_CLIENT_ID'],
@@ -25,7 +25,7 @@ require_relative 'glogin/cookie'
 #       'http://localhost:4567/auth'
 #     )
 #   end
-#   
+#
 #   get '/auth' do
 #     user = settings.glogin.user(params[:code])
 #     cookie = GLogin::Cookie::Open.new(user, ENV['ENCRYPTION_SECRET'])

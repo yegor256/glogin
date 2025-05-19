@@ -127,7 +127,7 @@ module GLogin
     #   encrypted = codec.encrypt('sensitive data')
     #   # => "3Hs9k2LgU..." (Base58 encoded)
     #
-    # @example Encrypt with Base64 encoding  
+    # @example Encrypt with Base64 encoding
     #   codec = GLogin::Codec.new('secret', base64: true)
     #   encrypted = codec.encrypt('sensitive data')
     #   # => "U29tZUJhc2U2NC..." (Base64 encoded)

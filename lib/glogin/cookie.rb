@@ -31,7 +31,7 @@ module GLogin
   #   user_data = auth.user(code)
   #   cookie = GLogin::Cookie::Open.new(user_data, 'secret-key')
   #   response.set_cookie('glogin', cookie.to_s)
-  #   
+  #
   #   # When reading the cookie
   #   cookie_text = request.cookies['glogin']
   #   closed = GLogin::Cookie::Closed.new(cookie_text, 'secret-key')
@@ -47,7 +47,7 @@ module GLogin
     # @example Read a cookie from HTTP request
     #   cookie_text = request.cookies['glogin']
     #   closed = GLogin::Cookie::Closed.new(cookie_text, ENV['SECRET'])
-    #   
+    #
     #   begin
     #     user = closed.to_user
     #     session[:user_id] = user['id']
@@ -121,7 +121,7 @@ module GLogin
     # @example Create a cookie after successful authentication
     #   user_data = auth.user(code)
     #   open = GLogin::Cookie::Open.new(user_data, ENV['SECRET'])
-    #   
+    #
     #   # Set cookie with options
     #   response.set_cookie('glogin', {
     #     value: open.to_s,
@@ -181,10 +181,10 @@ module GLogin
       #   open = GLogin::Cookie::Open.new(user_data, secret)
       #   cookie_value = open.to_s
       #   # => "3Hs9k2LgU..." (encrypted string)
-      #   
+      #
       #   # Use with Sinatra
       #   response.set_cookie('glogin', cookie_value)
-      #   
+      #
       #   # Use with Rails
       #   cookies[:glogin] = {
       #     value: cookie_value,
