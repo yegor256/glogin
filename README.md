@@ -27,7 +27,7 @@ First, somewhere in the global space, before the app starts:
 require 'glogin'
 configure do
   set :glogin, GLogin::Auth.new(
-    # Make sure their values are coming from a secure
+    # Make sure these values are coming from a secure
     # place and are not visible in the source code:
     client_id, client_secret,
     # This is what you will register in GitHub as an
@@ -59,7 +59,7 @@ before '/*' do
 end
 ```
 
-If the `glogin` cookie is coming in and contains a valid data,
+If the `glogin` cookie is coming in and contains valid data,
 a local variable `@user` will be set to something like this:
 
 ```ruby
@@ -103,10 +103,10 @@ it is:
 settings.glogin.login_uri
 ```
 
-For unit testing you can just provide an empty string as a `secret` for
+For unit testing, you can just provide an empty string as a `secret` for
 `GLogin::Cookie::Open` and `GLogin::Cookie::Closed`
 and the encryption will be disabled:
-whatever will be coming from the cookie will be trusted. For testing
+whatever comes from the cookie will be trusted. For testing
 it will be convenient to provide a user name in a query string, like:
 
 ```text
@@ -134,7 +134,7 @@ Also, you can use `GLogin::Codec` just to encrypt/decrypt a piece of text:
 
 ```ruby
 require 'glogin/codec'
-codec = GLogin:Codec.new('the secret')
+codec = GLogin::Codec.new('the secret')
 encrypted = codec.encrypt('Hello, world!')
 decrypted = codec.decrypt(encrypted)
 ```
