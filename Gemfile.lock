@@ -11,12 +11,10 @@ GEM
   specs:
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
-    ansi (1.5.0)
     ast (2.4.3)
     base58 (0.2.3)
     base64 (0.2.0)
     bigdecimal (3.1.9)
-    builder (3.3.0)
     crack (1.0.0)
       bigdecimal
       rexml
@@ -28,11 +26,6 @@ GEM
     language_server-protocol (3.17.0.5)
     lint_roller (1.1.0)
     minitest (5.25.5)
-    minitest-reporters (1.7.1)
-      ansi
-      builder
-      minitest (>= 5.0)
-      ruby-progressbar
     openssl (3.3.0)
     parallel (1.27.0)
     parser (3.3.8.0)
@@ -51,7 +44,7 @@ GEM
       psych (>= 4.0.0)
     regexp_parser (2.10.0)
     rexml (3.4.1)
-    rubocop (1.75.6)
+    rubocop (1.75.7)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
@@ -76,14 +69,14 @@ GEM
     rubocop-rake (0.7.1)
       lint_roller (~> 1.1)
       rubocop (>= 1.72.1)
+    rubocop-rspec (3.6.0)
+      lint_roller (~> 1.1)
+      rubocop (~> 1.72, >= 1.72.1)
     ruby-progressbar (1.13.0)
     simplecov (0.22.0)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
       simplecov_json_formatter (~> 0.1)
-    simplecov-cobertura (2.1.0)
-      rexml
-      simplecov (~> 0.19)
     simplecov-html (0.13.1)
     simplecov_json_formatter (0.1.4)
     stringio (3.1.7)
@@ -94,7 +87,6 @@ GEM
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
-    yard (0.9.37)
 
 PLATFORMS
   arm64-darwin-22
@@ -106,17 +98,15 @@ PLATFORMS
 DEPENDENCIES
   glogin!
   minitest (~> 5.25)
-  minitest-reporters (~> 1.7)
   rake (~> 13.2)
   rdoc (~> 6.11)
   rubocop (~> 1.71)
   rubocop-minitest (> 0)
   rubocop-performance (> 0)
   rubocop-rake (> 0)
+  rubocop-rspec (> 0)
   simplecov (~> 0.22)
-  simplecov-cobertura (~> 2.1)
   webmock (~> 3.24)
-  yard (~> 0.9)
 
 BUNDLED WITH
    2.5.16
