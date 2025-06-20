@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
   s.description = 'Enables login/logout functionality for a Ruby web app'
   s.authors = ['Yegor Bugayenko']
   s.email = 'yegor256@gmail.com'
-  s.homepage = 'http://github.com/yegor256/glogin'
+  s.homepage = 'https://github.com/yegor256/glogin'
   s.files = `git ls-files`.split($RS)
   s.executables = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
   s.rdoc_options = ['--charset=UTF-8']
