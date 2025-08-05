@@ -24,7 +24,7 @@ GEM
     docile (1.4.1)
     erb (5.0.1)
     hashdiff (1.1.2)
-    json (2.12.2)
+    json (2.13.2)
     language_server-protocol (3.17.0.5)
     lint_roller (1.1.0)
     minitest (5.25.5)
@@ -35,7 +35,7 @@ GEM
       ruby-progressbar
     openssl (3.3.0)
     parallel (1.27.0)
-    parser (3.3.8.0)
+    parser (3.3.9.0)
       ast (~> 2.4.1)
       racc
     prism (1.4.0)
@@ -49,7 +49,7 @@ GEM
     rdoc (6.14.2)
       erb
       psych (>= 4.0.0)
-    regexp_parser (2.10.0)
+    regexp_parser (2.11.0)
     rexml (3.4.1)
     rubocop (1.75.8)
       json (~> 2.3)
@@ -62,7 +62,7 @@ GEM
       rubocop-ast (>= 1.44.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 2.4.0, < 4.0)
-    rubocop-ast (1.44.1)
+    rubocop-ast (1.46.0)
       parser (>= 3.3.7.2)
       prism (~> 1.4)
     rubocop-minitest (0.38.1)
@@ -81,7 +81,7 @@ GEM
       docile (~> 1.1)
       simplecov-html (~> 0.11)
       simplecov_json_formatter (~> 0.1)
-    simplecov-cobertura (3.0.0)
+    simplecov-cobertura (2.1.0)
       rexml
       simplecov (~> 0.19)
     simplecov-html (0.13.1)
@@ -114,7 +114,7 @@ DEPENDENCIES
   rubocop-performance (~> 1.25)
   rubocop-rake (~> 0.7)
   simplecov (~> 0.22)
-  simplecov-cobertura (~> 3.0)
+  simplecov-cobertura (~> 2.1)
   webmock (~> 3.24)
   yard (~> 0.9)
 
