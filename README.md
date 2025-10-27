@@ -12,7 +12,7 @@
 [![Hits-of-Code](https://hitsofcode.com/github/yegor256/glogin)](https://hitsofcode.com/view/github/yegor256/glogin)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/yegor256/glogin/blob/master/LICENSE.txt)
 
-This simple gem will help you enable login/logout through
+This simple gem helps you enable login/logout through
 [GitHub OAuth][doc]
 for your web application. This is how it works with
 [Sinatra](http://www.sinatrarb.com/),
@@ -60,13 +60,13 @@ end
 ```
 
 If the `glogin` cookie is coming in and contains valid data,
-a local variable `@user` will be set to something like this:
+a local variable `@user` is set to something like this:
 
 ```ruby
 { 'id' => '526301', 'login' => 'yegor256', 'avatar' => 'http://...' }
 ```
 
-If the `secret` is an empty string, the encryption will be disabled.
+If the `secret` is an empty string, the encryption is disabled.
 
 Next, we need a URL for GitHub OAuth callback:
 
@@ -94,10 +94,10 @@ It is recommended to provide the third "context" parameter to
 `GLogin::Cookie::Closed` and `GLogin::Cookie::Open` constructors, in order
 to enforce stronger security. The context may include the `User-Agent`
 HTTP header of the user, their IP address, and so on. When anything
-changes on the user side, they will be forced to re-login.
+changes on the user side, they are forced to re-login.
 
-One more thing is the login URL you will need for your front page. Here
-it is:
+One more thing is the login URL you need for your front page.
+Here it is:
 
 ```ruby
 settings.glogin.login_uri
@@ -105,9 +105,9 @@ settings.glogin.login_uri
 
 For unit testing, you can just provide an empty string as a `secret` for
 `GLogin::Cookie::Open` and `GLogin::Cookie::Closed`
-and the encryption will be disabled:
-whatever comes from the cookie will be trusted. For testing
-it will be convenient to provide a user name in a query string, like:
+and the encryption is disabled: whatever comes from the cookie is trusted.
+For testing it is convenient to provide a user name in a query string,
+like:
 
 ```text
 http://localhost:9292/?glogin=tester
@@ -144,7 +144,7 @@ decrypted = codec.decrypt(encrypted)
 Read
 [these guidelines](https://www.yegor256.com/2014/04/15/github-guidelines.html).
 Make sure your build is green before you contribute
-your pull request. You will need to have
+your pull request. You need to have
 [Ruby](https://www.ruby-lang.org/en/) 2.3+ and
 [Bundler](https://bundler.io/) installed. Then:
 
