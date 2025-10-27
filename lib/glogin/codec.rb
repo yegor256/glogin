@@ -154,7 +154,7 @@ module GLogin
     private
 
     def digest(len)
-      Digest::SHA1.hexdigest(@secret)[0..len - 1]
+      Digest::SHA1.hexdigest(@secret)[0..(len - 1)]
     end
 
     def cipher
