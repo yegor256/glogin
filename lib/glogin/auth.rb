@@ -92,9 +92,9 @@ module GLogin
     def user(code)
       if @secret.empty?
         return {
-          'id' => 526_301,
-          'login' => 'yegor256',
-          'avatar_url' => 'https://github.com/yegor256.png'
+          'id' => 1_024_025,
+          'login' => 'torvalds',
+          'avatar_url' => 'https://github.com/torvalds.png'
         }
       end
       raise 'Code can\'t be nil' if code.nil?
