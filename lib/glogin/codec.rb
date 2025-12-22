@@ -87,6 +87,7 @@ module GLogin
     #   end
     def decrypt(text)
       raise 'Text can\'t be nil' if text.nil?
+      text = text.to_s.encode('UTF-8', invalid: :replace, undef: :replace, replace: '?')
       if @secret.empty?
         text
       else
