@@ -28,6 +28,27 @@ end
 
 require 'minitest/autorun'
 require 'minitest/reporters'
+require 'net/http'
 require 'webmock/minitest'
 Minitest::Reporters.use! [Minitest::Reporters::SpecReporter.new]
 Minitest.load :minitest_reporter
+
+# Test helper that records every Net::HTTP instance created inside a block,
+# so tests can inspect their configuration (e.g. SSL verify_mode).
+module HttpSpy
+  def self.record
+    clients = []
+    original = Net::HTTP.method(:new)
+    Net::HTTP.define_singleton_method(:new) do |*args, **kwargs|
+      instance = original.call(*args, **kwargs)
+      clients << instance
+      instance
+    end
+    begin
+      yield
+    ensure
+      Net::HTTP.define_singleton_method(:new, original)
+    end
+    clients
+  end
+end
