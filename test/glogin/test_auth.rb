@@ -60,4 +60,32 @@ class TestAuth < Minitest::Test
     e = assert_raises(StandardError) { auth.user('47839893') }
     assert_includes(e.message, 'There is no \'access_token\'', e)
   end
+
+  def test_wraps_dns_failure_on_token_exchange
+    require 'socket'
+    auth = GLogin::Auth.new('1234', '4433', 'https://example.org')
+    stub_request(:post, 'https://github.com/login/oauth/access_token')
+      .to_raise(Socket::ResolutionError.new('getaddrinfo: Name or service not known'))
+    e = assert_raises(GLogin::ConnectionError) { auth.user('437849732894732') }
+    assert_kind_of(GLogin::Error, e)
+    assert_kind_of(Socket::ResolutionError, e.cause)
+  end
+
+  def test_wraps_connection_refused_on_user_fetch
+    auth = GLogin::Auth.new('1234', '4433', 'https://example.org')
+    stub_request(:post, 'https://github.com/login/oauth/access_token').to_return(
+      body: { access_token: 'some-token' }.to_json
+    )
+    stub_request(:get, 'https://api.github.com/user')
+      .to_raise(Errno::ECONNREFUSED.new('connection refused'))
+    e = assert_raises(GLogin::ConnectionError) { auth.user('437849732894732') }
+    assert_kind_of(Errno::ECONNREFUSED, e.cause)
+  end
+
+  def test_wraps_timeout_on_token_exchange
+    auth = GLogin::Auth.new('1234', '4433', 'https://example.org')
+    stub_request(:post, 'https://github.com/login/oauth/access_token')
+      .to_raise(Net::OpenTimeout.new('execution expired'))
+    assert_raises(GLogin::ConnectionError) { auth.user('437849732894732') }
+  end
 end

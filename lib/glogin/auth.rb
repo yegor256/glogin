@@ -6,7 +6,10 @@
 require 'cgi'
 require 'json'
 require 'net/http'
+require 'openssl'
+require 'socket'
 require 'uri'
+require_relative 'errors'
 
 # GLogin main module.
 # Author:: Yegor Bugayenko (yegor256@gmail.com)
@@ -107,7 +110,7 @@ module GLogin
       req['Accept-Header'] = 'application/json'
       token = access_token(code)
       req['Authorization'] = "token #{token}"
-      res = http.request(req)
+      res = perform(http, req, "user fetch with token #{escape(token)}")
       raise "HTTP error ##{res.code} with token #{escape(token)}: #{res.body}" unless res.code == '200'
       JSON.parse(res.body)
     end
@@ -128,12 +131,34 @@ module GLogin
         'client_secret' => @secret
       )
       req['Accept'] = 'application/json'
-      res = http.request(req)
+      res = perform(http, req, "token exchange with code #{escape(code)}")
       raise "HTTP error ##{res.code} with code #{escape(code)}: #{res.body}" unless res.code == '200'
       json = JSON.parse(res.body)
       token = json['access_token']
       raise "There is no 'access_token' in JSON response from GitHub: #{res.body}" if token.nil?
       token
+    end
+
+    # Low-level network errors that should be wrapped in
+    # GLogin::ConnectionError instead of leaking out as provider-specific
+    # classes like Socket::ResolutionError. SystemCallError covers the
+    # full Errno:: family (ECONNREFUSED, ECONNRESET, ETIMEDOUT, etc.).
+    CONNECTION_ERRORS = [
+      SocketError,
+      SystemCallError,
+      OpenSSL::SSL::SSLError,
+      Net::OpenTimeout,
+      Net::ReadTimeout,
+      Net::WriteTimeout,
+      EOFError,
+      IOError
+    ].freeze
+    private_constant :CONNECTION_ERRORS
+
+    def perform(http, req, context)
+      http.request(req)
+    rescue *CONNECTION_ERRORS => e
+      raise GLogin::ConnectionError, "#{e.class}: #{e.message} (during #{context})"
     end
 
     def escape(txt)
