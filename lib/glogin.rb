@@ -3,6 +3,7 @@
 # SPDX-FileCopyrightText: Copyright (c) 2017-2026 Yegor Bugayenko
 # SPDX-License-Identifier: MIT
 
+require_relative 'glogin/errors'
 require_relative 'glogin/auth'
 require_relative 'glogin/cookie'
 require_relative 'glogin/version'
