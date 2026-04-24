@@ -105,7 +105,7 @@ module GLogin
       uri = URI.parse('https://api.github.com/user')
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = true
-      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      http.verify_mode = OpenSSL::SSL::VERIFY_PEER
       req = Net::HTTP::Get.new(uri.request_uri)
       req['Accept-Header'] = 'application/json'
       token = access_token(code)
@@ -123,7 +123,7 @@ module GLogin
       uri = URI.parse('https://github.com/login/oauth/access_token')
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = true
-      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      http.verify_mode = OpenSSL::SSL::VERIFY_PEER
       req = Net::HTTP::Post.new(uri.request_uri)
       req.set_form_data(
         'code' => code,

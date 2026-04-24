@@ -88,4 +88,21 @@ class TestAuth < Minitest::Test
       .to_raise(Net::OpenTimeout.new('execution expired'))
     assert_raises(GLogin::ConnectionError) { auth.user('437849732894732') }
   end
+
+  def test_does_not_disable_ssl_verification
+    auth = GLogin::Auth.new('1234', '4433', 'https://example.org')
+    stub_request(:post, 'https://github.com/login/oauth/access_token')
+      .to_return(body: { access_token: 'some-token' }.to_json)
+    stub_request(:get, 'https://api.github.com/user')
+      .to_return(body: { login: 'yegor256' }.to_json)
+    clients = HttpSpy.record { auth.user('437849732894732') }
+    refute_empty(clients, 'expected Net::HTTP instances to be created')
+    clients.each do |http|
+      assert_predicate(http, :use_ssl?, "HTTPS should be on for #{http.address}")
+      refute_equal(
+        OpenSSL::SSL::VERIFY_NONE, http.verify_mode,
+        "SSL verification must not be disabled for #{http.address} (issue #170)"
+      )
+    end
+  end
 end
