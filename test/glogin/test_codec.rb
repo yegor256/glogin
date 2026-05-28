@@ -10,10 +10,7 @@ require_relative '../test__helper'
 class TestCodec < Minitest::Test
   def test_encodes_and_decodes
     text = 'This is the text, дорогой товарищ'
-    assert_equal(
-      text,
-      Base64.decode64(Base64.encode64(text)).force_encoding('UTF-8')
-    )
+    assert_equal(text, Base64.decode64(Base64.encode64(text)).force_encoding('UTF-8'))
   end
 
   def test_encrypts_and_decrypts
@@ -23,16 +20,14 @@ class TestCodec < Minitest::Test
   end
 
   def test_decrypts_with_invalid_password
-    assert_raises GLogin::Codec::DecodingError do
-      GLogin::Codec.new('the wrong key').decrypt(
-        GLogin::Codec.new('the right key').encrypt('the text')
-      )
+    assert_raises(GLogin::Codec::DecodingError) do
+      GLogin::Codec.new('the wrong key').decrypt(GLogin::Codec.new('the right key').encrypt('the text'))
     end
   end
 
   def test_decrypts_broken_base58
     %w[abc0 abcO abcl abcI].each do |t|
-      assert_raises GLogin::Codec::DecodingError do
+      assert_raises(GLogin::Codec::DecodingError) do
         GLogin::Codec.new('some-key').decrypt(t)
       end
     end
@@ -40,7 +35,7 @@ class TestCodec < Minitest::Test
 
   def test_decrypts_non_utf
     t = "\xFF\xFE\x12"
-    assert_raises GLogin::Codec::DecodingError do
+    assert_raises(GLogin::Codec::DecodingError) do
       GLogin::Codec.new('some-key').decrypt(t)
     end
   end
@@ -54,18 +49,17 @@ class TestCodec < Minitest::Test
   def test_encrypts_using_base64
     codec = GLogin::Codec.new('6hFGrte5LLmwi', base64: true)
     text = 'Hello, world!'
-    enc = codec.encrypt(text)
-    assert_equal(text, codec.decrypt(enc))
+    assert_equal(text, codec.decrypt(codec.encrypt(text)))
   end
 
   def test_decrypts_broken_text
-    assert_raises GLogin::Codec::DecodingError do
+    assert_raises(GLogin::Codec::DecodingError) do
       GLogin::Codec.new('the key').decrypt('этот текст не был зашифрован')
     end
   end
 
   def test_decrypts_broken_text_with_empty_key
-    assert_raises GLogin::Codec::DecodingError do
+    assert_raises(GLogin::Codec::DecodingError) do
       GLogin::Codec.new('key').decrypt('')
     end
   end

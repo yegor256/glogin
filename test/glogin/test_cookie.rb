@@ -42,25 +42,21 @@ class TestCookie < Minitest::Test
   end
 
   def test_decrypts_in_test_mode
-    user = GLogin::Cookie::Closed.new(
-      '123|test|http://example.com', ''
-    ).to_user
+    user = GLogin::Cookie::Closed.new('123|test|http://example.com', '').to_user
     assert_equal('123', user['id'])
     assert_equal('test', user['login'])
     assert_equal('http://example.com', user['avatar_url'])
   end
 
   def test_decrypts_in_test_mode_with_context
-    user = GLogin::Cookie::Closed.new(
-      '123', '', 'some context'
-    ).to_user
+    user = GLogin::Cookie::Closed.new('123', '', 'some context').to_user
     assert_equal('123', user['id'])
     assert_nil(user['login'])
     assert_nil(user['avatar_url'])
   end
 
   def test_fails_on_broken_text
-    assert_raises GLogin::Codec::DecodingError do
+    assert_raises(GLogin::Codec::DecodingError) do
       GLogin::Cookie::Closed.new(
         GLogin::Cookie::Open.new(
           JSON.parse('{"login":"x","avatar_url":"x","id":"1"}'),
@@ -73,7 +69,7 @@ class TestCookie < Minitest::Test
 
   def test_fails_on_wrong_context
     secret = 'fdjruewoijs789fdsufds89f7ds89fs'
-    assert_raises GLogin::Codec::DecodingError do
+    assert_raises(GLogin::Codec::DecodingError) do
       GLogin::Cookie::Closed.new(
         GLogin::Cookie::Open.new(
           JSON.parse('{"login":"x","avatar_url":"x","id":""}'),

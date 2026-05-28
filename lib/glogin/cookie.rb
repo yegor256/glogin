@@ -13,7 +13,6 @@ require_relative 'codec'
 # Copyright:: Copyright (c) 2017-2026 Yegor Bugayenko
 # License:: MIT
 module GLogin
-  # Split symbol inside the cookie text
   SPLIT = '|'
 
   # Secure cookie management for user sessions.
@@ -70,11 +69,11 @@ module GLogin
       # @param context [String] Optional context string for validation
       # @raise [RuntimeError] if any parameter is nil
       def initialize(text, secret, context = '')
-        raise 'Text can\'t be nil' if text.nil?
+        raise(ArgumentError, 'Text can\'t be nil') if text.nil?
         @text = text
-        raise 'Secret can\'t be nil' if secret.nil?
+        raise(ArgumentError, 'Secret can\'t be nil') if secret.nil?
         @secret = secret
-        raise 'Context can\'t be nil' if context.nil?
+        raise(ArgumentError, 'Context can\'t be nil') if context.nil?
         @context = context.to_s
       end
 
@@ -100,13 +99,9 @@ module GLogin
       #
       # @note If the secret is empty (test mode), the text is used as-is without decryption
       def to_user
-        plain = Codec.new(@secret).decrypt(@text)
-        id, login, avatar_url, ctx = plain.split(GLogin::SPLIT, 5)
+        id, login, avatar_url, ctx = Codec.new(@secret).decrypt(@text).split(GLogin::SPLIT, 5)
         if !@secret.empty? && ctx.to_s != @context
-          raise(
-            GLogin::Codec::DecodingError,
-            "Context '#{@context}' expected, but '#{ctx}' found"
-          )
+          raise(GLogin::Codec::DecodingError, "Context '#{@context}' expected, but '#{ctx}' found")
         end
         { 'id' => id, 'login' => login, 'avatar_url' => avatar_url }
       end
@@ -157,15 +152,15 @@ module GLogin
       #   puts open.login      # => "octocat"
       #   puts open.avatar_url # => "https://github.com/octocat.png"
       def initialize(json, secret, context = '')
-        raise 'JSON can\'t be nil' if json.nil?
-        raise 'JSON must contain "id" key' if json['id'].nil?
+        raise(ArgumentError, 'JSON can\'t be nil') if json.nil?
+        raise(ArgumentError, 'JSON must contain "id" key') if json['id'].nil?
         @id = json['id'].to_s
         @login = (json['login'] || '').to_s
         @avatar_url = (json['avatar_url'] || '').to_s
         @bearer = (json['bearer'] || '').to_s
-        raise 'Secret can\'t be nil' if secret.nil?
+        raise(ArgumentError, 'Secret can\'t be nil') if secret.nil?
         @secret = secret
-        raise 'Context can\'t be nil' if context.nil?
+        raise(ArgumentError, 'Context can\'t be nil') if context.nil?
         @context = context.to_s
       end
 
@@ -191,14 +186,7 @@ module GLogin
       #     httponly: true
       #   }
       def to_s
-        Codec.new(@secret).encrypt(
-          [
-            @id,
-            @login,
-            @avatar_url,
-            @context
-          ].join(GLogin::SPLIT)
-        )
+        Codec.new(@secret).encrypt([@id, @login, @avatar_url, @context].join(GLogin::SPLIT))
       end
     end
   end

@@ -11,7 +11,5 @@ require_relative 'test__helper'
 # Copyright:: Copyright (c) 2017-2026 Yegor Bugayenko
 # License:: MIT
 class TestGLogin < Minitest::Test
-  def test_basic
-    # Nothing yet
-  end
+  def test_basic; end
 end

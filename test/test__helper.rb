@@ -15,8 +15,8 @@ unless SimpleCov.running || ENV['PICKS']
       SimpleCov::Formatter::CoberturaFormatter
     ]
   )
-  SimpleCov.minimum_coverage 100
-  SimpleCov.minimum_coverage_by_file 95
+  SimpleCov.minimum_coverage(100)
+  SimpleCov.minimum_coverage_by_file(95)
   SimpleCov.start do
     add_filter 'test/'
     add_filter 'vendor/'
@@ -30,8 +30,8 @@ require 'minitest/autorun'
 require 'minitest/reporters'
 require 'net/http'
 require 'webmock/minitest'
-Minitest::Reporters.use! [Minitest::Reporters::SpecReporter.new]
-Minitest.load :minitest_reporter
+Minitest::Reporters.use!([Minitest::Reporters::SpecReporter.new])
+Minitest.load(:minitest_reporter)
 
 # Test helper that records every Net::HTTP instance created inside a block,
 # so tests can inspect their configuration (e.g. SSL verify_mode).

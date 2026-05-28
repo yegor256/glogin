@@ -8,43 +8,32 @@ require_relative '../test__helper'
 
 class TestAuth < Minitest::Test
   def test_authenticate_via_https
-    auth = GLogin::Auth.new('1234', '4433', 'https://example.org')
     stub_request(:post, 'https://github.com/login/oauth/access_token').to_return(
-      body: {
-        access_token: 'some-token'
-      }.to_json
+      body: { access_token: 'some-token' }.to_json
     )
     stub_request(:get, 'https://api.github.com/user').to_return(
-      body: {
-        auth_code: '437849732894732',
-        login: 'yegor256'
-      }.to_json
+      body: { auth_code: '437849732894732', login: 'yegor256' }.to_json
     )
-    user = auth.user('437849732894732')
-    assert_equal('yegor256', user['login'])
+    assert_equal('yegor256', GLogin::Auth.new('1234', '4433', 'https://example.org').user('437849732894732')['login'])
   end
 
   def test_login_uri
-    auth = GLogin::Auth.new(
-      'client_id', 'client_secret', 'http://www.example.com/github-oauth'
-    )
     assert(
-      auth.login_uri.start_with?(
-        'https://github.com/login/oauth/authorize'
-      )
+      GLogin::Auth.new(
+        'client_id', 'client_secret',
+        'http://www.example.com/github-oauth'
+      ).login_uri.start_with?('https://github.com/login/oauth/authorize')
     )
   end
 
   def test_get_fake_user
-    auth = GLogin::Auth.new('99999', '', 'http://www.example.com/github-oauth')
-    assert_equal('torvalds', auth.user('1234567890')['login'])
+    assert_equal('torvalds', GLogin::Auth.new('99999', '', 'http://www.example.com/github-oauth').user('1234567890')['login'])
   end
 
   def test_failed_authentication
     auth = GLogin::Auth.new('1234', '4433', 'https://example.org')
     stub_request(:post, 'https://github.com/login/oauth/access_token').to_return(status: 401)
-    e = assert_raises(StandardError) { auth.user('437849732894732') }
-    assert_includes(e.message, 'with code "43784***')
+    assert_includes(assert_raises(StandardError) { auth.user('437849732894732') }.message, 'with code "43784***')
   end
 
   def test_broken_json
@@ -62,7 +51,7 @@ class TestAuth < Minitest::Test
   end
 
   def test_wraps_dns_failure_on_token_exchange
-    require 'socket'
+    require('socket')
     auth = GLogin::Auth.new('1234', '4433', 'https://example.org')
     stub_request(:post, 'https://github.com/login/oauth/access_token')
       .to_raise(Socket::ResolutionError.new('getaddrinfo: Name or service not known'))
@@ -76,10 +65,8 @@ class TestAuth < Minitest::Test
     stub_request(:post, 'https://github.com/login/oauth/access_token').to_return(
       body: { access_token: 'some-token' }.to_json
     )
-    stub_request(:get, 'https://api.github.com/user')
-      .to_raise(Errno::ECONNREFUSED.new('connection refused'))
-    e = assert_raises(GLogin::ConnectionError) { auth.user('437849732894732') }
-    assert_kind_of(Errno::ECONNREFUSED, e.cause)
+    stub_request(:get, 'https://api.github.com/user').to_raise(Errno::ECONNREFUSED.new('connection refused'))
+    assert_kind_of(Errno::ECONNREFUSED, assert_raises(GLogin::ConnectionError) { auth.user('437849732894732') }.cause)
   end
 
   def test_wraps_timeout_on_token_exchange
@@ -93,8 +80,7 @@ class TestAuth < Minitest::Test
     auth = GLogin::Auth.new('1234', '4433', 'https://example.org')
     stub_request(:post, 'https://github.com/login/oauth/access_token')
       .to_return(body: { access_token: 'some-token' }.to_json)
-    stub_request(:get, 'https://api.github.com/user')
-      .to_return(body: { login: 'yegor256' }.to_json)
+    stub_request(:get, 'https://api.github.com/user').to_return(body: { login: 'yegor256' }.to_json)
     clients = HttpSpy.record { auth.user('437849732894732') }
     refute_empty(clients, 'expected Net::HTTP instances to be created')
     clients.each do |http|

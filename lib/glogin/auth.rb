@@ -50,12 +50,12 @@ module GLogin
     #     'https://myapp.com/auth/callback'
     #   )
     def initialize(id, secret, redirect)
-      raise "GitHub client ID can't be nil" if id.nil?
+      raise(ArgumentError, "GitHub client ID can't be nil") if id.nil?
       @id = id
-      raise "GitHub client secret can't be nil" if secret.nil?
+      raise(ArgumentError, "GitHub client secret can't be nil") if secret.nil?
       @secret = secret
-      raise "Redirect URL can't be nil" if redirect.nil?
-      raise "Redirect URL can't be empty" if redirect.empty?
+      raise(ArgumentError, "Redirect URL can't be nil") if redirect.nil?
+      raise(ArgumentError, "Redirect URL can't be empty") if redirect.empty?
       @redirect = redirect
     end
 
@@ -100,8 +100,8 @@ module GLogin
           'avatar_url' => 'https://github.com/torvalds.png'
         }
       end
-      raise 'Code can\'t be nil' if code.nil?
-      raise 'Code can\'t be empty' if code.empty?
+      raise(ArgumentError, 'Code can\'t be nil') if code.nil?
+      raise(ArgumentError, 'Code can\'t be empty') if code.empty?
       uri = URI.parse('https://api.github.com/user')
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = true
@@ -111,38 +111,29 @@ module GLogin
       token = access_token(code)
       req['Authorization'] = "token #{token}"
       res = perform(http, req, "user fetch with token #{escape(token)}")
-      raise "HTTP error ##{res.code} with token #{escape(token)}: #{res.body}" unless res.code == '200'
+      raise(StandardError, "HTTP error ##{res.code} with token #{escape(token)}: #{res.body}") unless res.code == '200'
       JSON.parse(res.body)
     end
 
     private
 
     def access_token(code)
-      raise 'Code can\'t be nil' if code.nil?
-      raise 'Code can\'t be empty' if code.empty?
+      raise(ArgumentError, 'Code can\'t be nil') if code.nil?
+      raise(ArgumentError, 'Code can\'t be empty') if code.empty?
       uri = URI.parse('https://github.com/login/oauth/access_token')
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = true
       http.verify_mode = OpenSSL::SSL::VERIFY_PEER
       req = Net::HTTP::Post.new(uri.request_uri)
-      req.set_form_data(
-        'code' => code,
-        'client_id' => @id,
-        'client_secret' => @secret
-      )
+      req.set_form_data('code' => code, 'client_id' => @id, 'client_secret' => @secret)
       req['Accept'] = 'application/json'
       res = perform(http, req, "token exchange with code #{escape(code)}")
-      raise "HTTP error ##{res.code} with code #{escape(code)}: #{res.body}" unless res.code == '200'
-      json = JSON.parse(res.body)
-      token = json['access_token']
-      raise "There is no 'access_token' in JSON response from GitHub: #{res.body}" if token.nil?
+      raise(StandardError, "HTTP error ##{res.code} with code #{escape(code)}: #{res.body}") unless res.code == '200'
+      token = JSON.parse(res.body)['access_token']
+      raise(StandardError, "There is no 'access_token' in JSON response from GitHub: #{res.body}") if token.nil?
       token
     end
 
-    # Low-level network errors that should be wrapped in
-    # GLogin::ConnectionError instead of leaking out as provider-specific
-    # classes like Socket::ResolutionError. SystemCallError covers the
-    # full Errno:: family (ECONNREFUSED, ECONNRESET, ETIMEDOUT, etc.).
     CONNECTION_ERRORS = [
       SocketError,
       SystemCallError,
@@ -158,17 +149,12 @@ module GLogin
     def perform(http, req, context)
       http.request(req)
     rescue *CONNECTION_ERRORS => e
-      raise GLogin::ConnectionError, "#{e.class}: #{e.message} (during #{context})"
+      raise(GLogin::ConnectionError, "#{e.class}: #{e.message} (during #{context})")
     end
 
     def escape(txt)
       prefix = 4
-      [
-        '"',
-        txt[0..prefix],
-        '*' * (txt.length - prefix),
-        '"'
-      ].join
+      ['"', txt[0..prefix], '*' * (txt.length - prefix), '"'].join
     end
   end
 end

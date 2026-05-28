@@ -59,7 +59,7 @@ module GLogin
     # @example Create codec in test mode (no encryption)
     #   codec = GLogin::Codec.new('')
     def initialize(secret = '', base64: false)
-      raise 'Secret can\'t be nil' if secret.nil?
+      raise(ArgumentError, 'Secret can\'t be nil') if secret.nil?
       @secret = secret
       @base64 = base64
     end
@@ -86,7 +86,7 @@ module GLogin
     #     puts "Decryption failed: #{e.message}"
     #   end
     def decrypt(text)
-      raise 'Text can\'t be nil' if text.nil?
+      raise(ArgumentError, 'Text can\'t be nil') if text.nil?
       text = text.to_s.encode('UTF-8', invalid: :replace, undef: :replace, replace: '?')
       if @secret.empty?
         text
@@ -95,22 +95,22 @@ module GLogin
         cpr.decrypt
         cpr.key = digest(cpr.key_len)
         if @base64
-          raise DecodingError, "This is not Base64: #{text.inspect}" unless %r{^[a-zA-Z0-9\\+/=]+$}.match?(text)
+          raise(DecodingError, "This is not Base64: #{text.inspect}") unless %r{^[a-zA-Z0-9\\+/=]+$}.match?(text)
         else
-          raise DecodingError, "This is not Base58: #{text.inspect}" unless /^[a-km-zA-HJ-NP-Z1-9]+$/.match?(text)
+          raise(DecodingError, "This is not Base58: #{text.inspect}") unless /^[a-km-zA-HJ-NP-Z1-9]+$/.match?(text)
         end
         plain = @base64 ? Base64.decode64(text) : Base58.base58_to_binary(text)
-        raise DecodingError if plain.empty?
+        raise(DecodingError) if plain.empty?
         decrypted = cpr.update(plain)
         decrypted << cpr.final
         salt, body = decrypted.to_s.split(' ', 2)
-        raise DecodingError if salt.empty?
-        raise DecodingError if body.nil?
+        raise(DecodingError) if salt.empty?
+        raise(DecodingError) if body.nil?
         body.force_encoding('UTF-8')
         body
       end
     rescue OpenSSL::Cipher::CipherError => e
-      raise DecodingError, e.message
+      raise(DecodingError, e.message)
     end
 
     # Encrypts a plaintext string.
@@ -138,15 +138,14 @@ module GLogin
     #   enc2 = codec.encrypt('hello')
     #   enc1 != enc2  # => true (due to random salt)
     def encrypt(text)
-      raise 'Text can\'t be nil' if text.nil?
+      raise(ArgumentError, 'Text can\'t be nil') if text.nil?
       if @secret.empty?
         text
       else
         cpr = cipher
         cpr.encrypt
         cpr.key = digest(cpr.key_len)
-        salt = SecureRandom.base64(Random.rand(8..32))
-        encrypted = cpr.update("#{salt} #{text}")
+        encrypted = cpr.update("#{SecureRandom.base64(Random.rand(8..32))} #{text}")
         encrypted << cpr.final
         @base64 ? Base64.encode64(encrypted).delete("\n") : Base58.binary_to_base58(encrypted)
       end

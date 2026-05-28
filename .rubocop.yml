@@ -14,6 +14,7 @@ plugins:
   - rubocop-minitest
   - rubocop-performance
   - rubocop-rake
+  - rubocop-elegant
 Minitest/EmptyLineBeforeAssertionMethods:
   Enabled: false
 Gemspec/RequiredRubyVersion:
@@ -34,3 +35,19 @@ Metrics/PerceivedComplexity:
   Max: 20
 Layout/EmptyLineAfterGuardClause:
   Enabled: false
+Elegant/NoClassInModule:
+  Exclude:
+    - 'lib/**/*'
+    - '**/test_*.rb'
+    - '**/*Test.rb'
+Elegant/GoodMethodName:
+  AllowedNames:
+    - login_uri
+    - access_token
+    - test_decrypts_broken_base58
+    - test_encrypts_using_base64
+Elegant/GoodVariableName:
+  AllowedNames:
+    - '@base64'
+    - 'avatar_url'
+    - '@avatar_url'
