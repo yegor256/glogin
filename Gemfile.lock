@@ -9,7 +9,7 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.9.0)
+    addressable (2.9.2)
       public_suffix (>= 2.0.2, < 8.0)
     ansi (1.6.0)
     ast (2.4.3)
@@ -22,8 +22,8 @@ GEM
       rexml
     drb (2.2.3)
     erb (6.0.7)
-    hashdiff (1.2.1)
-    json (2.21.2)
+    hashdiff (1.2.2)
+    json (3.1.0)
     language_server-protocol (3.17.0.6)
     lint_roller (1.1.0)
     logger (1.7.0)
